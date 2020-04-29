@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import { View,Text, Image, StyleSheet } from 'react-native';
 import { Button } from 'native-base';
 import * as firebase from 'firebase';
-import {AntDesign} from 'react-native-vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Google from "expo-google-app-auth";
 
 class GoogleSign extends Component{
@@ -98,7 +98,7 @@ class GoogleSign extends Component{
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
               <Image  style={{width:250,height:250,marginVertical:30}}  source={require('../assests/images/Stay-Home.png')}/>
                <Button style={styles.gbtn} info rounded onPress={()=>this.props.navigation.navigate('Sign')} >
-                 {/* <AntDesign size={32} color='white' name="google"/> */}
+                  <AntDesign size={32} color='white' name="google"/> 
                   <Text style={{marginHorizontal:5,fontWeight:'bold',color:'white',marginBottom:2}}>SIGN IN WITH GOOGLE</Text>
                </Button>
             </View>
