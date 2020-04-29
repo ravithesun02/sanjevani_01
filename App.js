@@ -1,25 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
-import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
-
+import * as React from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import Main from './src/MainComponent';
+import * as firebase from 'firebase';
 import BackgroundJob from 'react-native-background-actions';
+
+import {firebaseConfig } from './config';
+
+firebase.initializeApp(firebaseConfig);
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 
@@ -54,7 +41,7 @@ const options = {
   },
 };
 
-class App extends React.Component {
+class App extends React.Component{
   playing = BackgroundJob.isRunning();
 
   /**
@@ -75,51 +62,17 @@ class App extends React.Component {
       await BackgroundJob.stop();
     }
   };
-  render() {
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <Header />
-            {global.HermesInternal == null ? null : (
-              <View style={styles.engine}>
-                <Text style={styles.footer}>Engine: Hermes</Text>
-              </View>
-            )}
-            <View style={styles.body}>
-              <TouchableOpacity
-                style={{height: 100, width: 100, backgroundColor: 'red'}}
-                onPress={this.toggleBackground}></TouchableOpacity>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </>
-    );
+
+  componentDidMount(){
+    //this.toggleBackground();
+  }
+  render()
+  {
+    return(
+     <Main/>
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
 export default App;
+

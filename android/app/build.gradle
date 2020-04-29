@@ -134,6 +134,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [appAuthRedirectScheme: 'com.sanjevani']
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -186,11 +188,14 @@ android {
         }
     }
 }
+apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    addUnimodulesDependencies()
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
+    implementation 'com.android.support:multidex:1.0.3'// From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
@@ -217,7 +222,7 @@ dependencies {
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
- compile project(':react-native-background-actions')
+// compile project(':react-native-background-actions')
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
