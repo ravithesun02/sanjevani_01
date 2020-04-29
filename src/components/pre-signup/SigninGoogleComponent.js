@@ -2,10 +2,26 @@ import React ,{Component} from 'react';
 import { View,Text, Image, StyleSheet } from 'react-native';
 import { Button } from 'native-base';
 import * as firebase from 'firebase';
-import {AntDesign} from 'react-native-vector-icons';
-import * as Google from "expo-google-app-auth";
+// import {AntDesign} from 'react-native-vector-icons';
+// import * as Google from "expo-google-app-auth";
+import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 
 class GoogleSign extends Component{
+
+  componentDidMount()
+  {
+    GoogleSignin.configure({
+      scopes: ["profile", "email"], // what API you want to access on behalf of the user, default is email and profile
+  webClientId: '30917214910-kdsbjkejp0kgi4u4djup2615pvrqidv4.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  hostedDomain: '', // specifies a hosted domain restriction
+  loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+  forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+  accountName: '', // [Android] specifies an account name on the device that should be used
+  //iosClientId: '<FROM DEVELOPER CONSOLE>',
+  androidClientId:'30917214910-0h41jb5s11tm1oadn00v214cqi567t4c.apps.googleusercontent.com'
+    });
+  }
 
   isUserEqual=(googleUser, firebaseUser)=> {
     if (firebaseUser) {
@@ -68,27 +84,25 @@ class GoogleSign extends Component{
     }.bind(this));
   }
 
-  signInWithGoogle = async () => {
-    try {
-      const result = await Google.logInAsync({
-        // iosClientId: IOS_CLIENT_ID,
-        androidClientId: '30917214910-fe7p5pnjrvbcjbv3gamoj6djd44cm2s8.apps.googleusercontent.com',
-        scopes: ["profile", "email"]
-      });
 
-      if (result.type === "success") {
-        console.log("LoginScreen.js.js 21 | ", result.user.givenName);
-        this.onSignIn(result);
-        // this.props.navigation.navigate("Profile", {
-        //   username: result.user.givenName
-        // }); //after Google login redirect to Profile
-        return result.accessToken;
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      //this.setState({ userInfo });
+      console.log(userInfo);
+      this.onSignIn(userInfo);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
       } else {
-        return { cancelled: true };
+        // some other error happened
+        console.log(error);
       }
-    } catch (e) {
-      console.log('LoginScreen.js.js 30 | Error with login', e);
-      return { error: true };
     }
   };
 
@@ -97,7 +111,7 @@ class GoogleSign extends Component{
         return(
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
               <Image  style={{width:250,height:250,marginVertical:30}}  source={require('../assests/images/Stay-Home.png')}/>
-               <Button style={styles.gbtn} info rounded onPress={()=>this.props.navigation.navigate('Sign')} >
+               <Button style={styles.gbtn} info rounded onPress={()=>this.signIn()} >
                  {/* <AntDesign size={32} color='white' name="google"/> */}
                   <Text style={{marginHorizontal:5,fontWeight:'bold',color:'white',marginBottom:2}}>SIGN IN WITH GOOGLE</Text>
                </Button>

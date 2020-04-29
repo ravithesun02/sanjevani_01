@@ -1389,6 +1389,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
+"@react-native-community/google-signin@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/google-signin/-/google-signin-4.0.0.tgz#b839a310ad65f3647b4ecbd75b5a8460700d4185"
+  integrity sha512-XC7Gi9y7+zdWrjusiuiEHBHcqBYCXezBl8OPXrPWhI+ocYmUaYXk1d5OMrb6UFMQe6M7/0HtCIEU5mEjxirqzw==
+
 "@react-native-community/masked-view@^0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -3119,13 +3124,6 @@ expect@^25.4.0:
     jest-message-util "^25.4.0"
     jest-regex-util "^25.2.6"
 
-expo-app-auth@~9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/expo-app-auth/-/expo-app-auth-9.0.0.tgz#879893b90bb083acd705012495bc907cd5d700e7"
-  integrity sha512-loDPUxVNhCJVxjDdLevoApOBQkcK8QQXSNyWqKIAvzwjuxQQ7EtwSXOVMThsPU/wWCHOW/Zbj7ykBYUmJi6jLA==
-  dependencies:
-    invariant "^2.2.4"
-
 expo-asset@~8.1.0:
   version "8.1.4"
   resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-8.1.4.tgz#5265c28c1c279b2f9779269195bec4caf250ba5d"
@@ -3148,14 +3146,6 @@ expo-file-system@~8.1.0:
   integrity sha512-xb4roeU8CotW8t3LkmsrliNbgFpY2KB+3sW1NnujnH39pFVwCd/kfujCYzRauj8aUy/HhSq+3xGkQTpC7pSjVw==
   dependencies:
     uuid "^3.4.0"
-
-expo-google-app-auth@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/expo-google-app-auth/-/expo-google-app-auth-8.1.0.tgz#2f173cdd47733311ccdae911a1a6c74963a3593b"
-  integrity sha512-7daHlFd9zNMOpY49EPBVtgY+KUeI1/dFooEGNoQZcXPQGDo1Sw9AYqyYJvYNXni4n0sFHCFFHxEHL11ECXZzaw==
-  dependencies:
-    expo-app-auth "~9.0.0"
-    expo-constants "~9.0.0"
 
 expo-image-loader@~1.0.0:
   version "1.0.1"
