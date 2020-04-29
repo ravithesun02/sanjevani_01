@@ -6197,6 +6197,11 @@ react-native-screens@^2.7.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.7.0.tgz#2d3cf3c39a665e9ca1c774264fccdb90e7944047"
   integrity sha512-n/23IBOkrTKCfuUd6tFeRkn3lB2QZ3cmvoubRscR0JU/Zl4/ZyKmwnFmUv1/Fr+2GH/H8UTX59kEKDYYg3dMgA==
 
+react-native-send-intent@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-send-intent/-/react-native-send-intent-1.2.2.tgz#9ee3d375864e0fe5e10ad8f0cee9c054b0bee08e"
+  integrity sha512-vJUY89b4sgzazPqedKWG+wNEyqSjxJuwU9SP0tXIVvZdHHTt1AzH1GHJ1H3mtLDSdW7c4693L86i4GD10/pZqw==
+
 react-native-swiper@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.6.0.tgz#59fdbdf95addee49630312f27077622c27776819"

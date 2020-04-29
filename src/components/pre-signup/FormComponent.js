@@ -8,6 +8,8 @@ import { Card, ListItem, List,Button } from 'native-base';
 import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
 import  Entypo from 'react-native-vector-icons/Entypo';
 import * as Location from 'expo-location';
+import LocationModule from '../assests/reuse/LocationComponent';
+import {openSettings} from 'react-native-send-intent';
 
 const createFormData = (profile_image, body) => {
  
@@ -36,7 +38,9 @@ class SignUp extends React.Component {
       lon:null,
       isLocationAccessed:false,
       modalVisible:false,
-      formData:{}
+      formData:{},
+      isModal:false,
+      openSetting:false
     }
   }
 
@@ -69,12 +73,21 @@ class SignUp extends React.Component {
 
   }
 
-  findCoordinates = () => {
+  findCoordinates =() => {
+    try
+    {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
+      let { status } = await Location.getPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+        alert('Permission to access location was denied');
+        this.setState({
+          isModal:true
+        })
+        
       }
+
+      else
+      {
 
       let location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Highest,
@@ -83,7 +96,13 @@ class SignUp extends React.Component {
       this.setState({lat:location.coords.latitude});
       this.setState({lon:location.coords.longitude});
       this.proceedToSubmit();
+    }
     })();
+  }
+  catch(error)
+  {
+    this.setState({isModal:true});
+  }
 }
 
 toggleModal(){
@@ -101,6 +120,17 @@ formSubmit(values)
   });
 }
 
+opensettings=()=>{
+  console.log('here');
+
+  openSettings("android.settings.APPLICATION_DETAILS_SETTINGS");
+
+  this.setState({
+    openSetting:false
+  });
+
+}
+
 postData()
 {
   this.state.formData.home_location={
@@ -116,6 +146,24 @@ postData()
     const {profile_image} = this.state;
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
+         <Modal 
+            onDismiss={()=>{this.state.openSetting?this.opensettings:undefined}}
+            visible={this.state.isModal}
+            transparent={true}
+            animationType='fade'
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={{color:'red',fontWeight:'bold',marginVertical:5}}>It seems like you have disabled location ! </Text>
+                        <Button style={{borderRadius:10,justifyContent:'center',alignItems:'center',padding:8,backgroundColor:'#FF8A65'}} onPress={()=>{this.setState({isModal:false,openSetting:true})}}>
+                            <Text style={{fontWeight:'bold',color:'white'}}>Enable Location</Text>
+                        </Button>
+
+                    </View>
+                </View>
+
+            </Modal>
+        
          <Modal
             animationType='fade'
             transparent={true}
@@ -123,6 +171,7 @@ postData()
             >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
+                <LocationModule/>
             <Text style={{margin:'5%',fontWeight:'bold'}}>Kindly give us access to your Location</Text>
             <Text style={{margin:'5%',marginBottom:'6%',color:'red'}}>Please be sure you are at your HOME , while enabling Location</Text>
             <Entypo name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates} >Allow</Entypo>
