@@ -5,8 +5,9 @@ import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
 import * as Yup from 'yup';
 import { Card, ListItem, List,Button } from 'native-base';
-// import { FontAwesome5 ,Entypo} from '@expo/vector-icons';
-import {FontAwesome5,Entypo} from 'react-native-vector-icons';
+import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
+import  Entypo from 'react-native-vector-icons/Entypo';
+import * as Location from 'expo-location';
 
 const createFormData = (profile_image, body) => {
  
@@ -69,19 +70,20 @@ class SignUp extends React.Component {
   }
 
   findCoordinates = () => {
-    navigator.geolocation.getCurrentPosition(
-        position => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+      }
 
-            this.setState({lat:position.coords.latitude});
-            this.setState({lon:position.coords.longitude});
-            alert(JSON.stringify(this.state.lat));
-            this.proceedToSubmit();
-            
-        },
-        error => alert("please allow access to location"),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        
-    );
+      let location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Highest,
+        maximumAge: 60000
+      });
+      this.setState({lat:location.coords.latitude});
+      this.setState({lon:location.coords.longitude});
+      this.proceedToSubmit();
+    })();
 }
 
 toggleModal(){
@@ -123,8 +125,7 @@ postData()
               <View style={styles.modalView}>
             <Text style={{margin:'5%',fontWeight:'bold'}}>Kindly give us access to your Location</Text>
             <Text style={{margin:'5%',marginBottom:'6%',color:'red'}}>Please be sure you are at your HOME , while enabling Location</Text>
-            {/* <Entypo.Button name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates}>Allow</Entypo.Button>
-            </View> */}
+            <Entypo name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates} >Allow</Entypo>
             </View>
             </View>
           </Modal>
@@ -143,12 +144,12 @@ postData()
               style={{width:100, height:100, borderRadius:50}}
               /> 
              
-             {/* <FontAwesome5 name='camera' size={20} color='black' style={{position:'absolute',bottom:8,right:0}} onPress={this.handlephoto} /> */}
+             <FontAwesome5 name='camera' size={20} color='black' style={{position:'absolute',bottom:8,right:0}} onPress={this.handlephoto} />
               </View>
               : 
               <View>
               <Button style={{width:100,height:100,backgroundColor:'#D8B59A',justifyContent:'center',alignItems:'center',borderRadius:50}} onPress={this.handlephoto}>
-              {/* <FontAwesome5 name='camera' size={32} color="white" /> */}
+              <FontAwesome5 name='camera' size={32} color="white" /> 
             </Button>
             </View>
             }
