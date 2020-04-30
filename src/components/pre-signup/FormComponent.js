@@ -79,7 +79,7 @@ class SignUp extends React.Component {
     (async () => {
       let { status } = await Location.getPermissionsAsync();
       if (status !== 'granted') {
-        alert('Permission to access location was denied');
+       // alert('Permission to access location was denied');
         this.setState({
           isModal:true
         })
@@ -121,9 +121,9 @@ formSubmit(values)
 }
 
 opensettings=()=>{
-  console.log('here');
+ // console.log('here');
 
-  openSettings("android.settings.APPLICATION_DETAILS_SETTINGS");
+  openSettings("android.settings.SETTINGS");
 
   this.setState({
     openSetting:false
@@ -147,7 +147,7 @@ postData()
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
          <Modal 
-            onDismiss={()=>{this.state.openSetting?this.opensettings:undefined}}
+            onDismiss={()=>{this.state.openSetting?this.opensettings():undefined}}
             visible={this.state.isModal}
             transparent={true}
             animationType='fade'
@@ -155,7 +155,7 @@ postData()
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={{color:'red',fontWeight:'bold',marginVertical:5}}>It seems like you have disabled location ! </Text>
-                        <Button style={{borderRadius:10,justifyContent:'center',alignItems:'center',padding:8,backgroundColor:'#FF8A65'}} onPress={()=>{this.setState({isModal:false,openSetting:true})}}>
+                        <Button style={{borderRadius:10,justifyContent:'center',alignItems:'center',padding:8,backgroundColor:'#FF8A65'}} onPress={()=>{this.setState({isModal:false,openSetting:true});this.opensettings()}}>
                             <Text style={{fontWeight:'bold',color:'white'}}>Enable Location</Text>
                         </Button>
 
