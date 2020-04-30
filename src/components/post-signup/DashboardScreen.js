@@ -3,6 +3,7 @@ import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions } from 
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
+import BackModule from '../assests/reuse/BgModule';
 
 const {height,width}=Dimensions.get('window');
 
@@ -12,6 +13,7 @@ class Dashboard extends Component{
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
                 <LocationModule/>
+                <BackModule/>
                 <View style={styles.container}>
                     <View style={styles.titleImage}>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
