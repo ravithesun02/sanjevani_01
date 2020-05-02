@@ -8,6 +8,7 @@ import { GoogleSignin, statusCodes } from '@react-native-community/google-signin
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
+import Loader from '../../components/assests/reuse/loadingScreen';
 
 
 class GoogleSign extends Component{
@@ -38,7 +39,7 @@ onSignIn=(userInfo)=>{
   })
   .then(response=>{
     if(response.ok)
-    return response;
+      return response;
     else
     {
         var error=new Error('Error'+response.status+':'+response.statusText);
@@ -74,6 +75,7 @@ error=>{
     console.log(err);
   })
 }
+
   
 
   signIn = async () => {
