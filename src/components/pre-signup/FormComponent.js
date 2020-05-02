@@ -4,24 +4,23 @@ import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
 import * as Yup from 'yup';
-import { Card, ListItem, List,Button } from 'native-base';
+import { Card, ListItem, List,Button ,Toast} from 'native-base';
 import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
 import  Entypo from 'react-native-vector-icons/Entypo';
 import * as Location from 'expo-location';
 import LocationModule from '../assests/reuse/LocationComponent';
 import {openSettings} from 'react-native-send-intent';
+import {baseURL} from '../assests/reuse/baseUrl';
+import * as SecureStore from 'expo-secure-store';
 
-const createFormData = (profile_image, body) => {
- 
-};
-
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dzixwmfmz/upload';
 
 const SignupSchema = Yup.object().shape({
-  firstname: Yup.string()
+  first_name: Yup.string()
     .min(2, '*Too Short!')
     .max(50, '*Too Long!')
     .required('*firstname Required'),
-  lastname: Yup.string()
+  last_name: Yup.string()
     .min(2, '*Too Short!')
     .max(50, '*Too Long!')
     .required('*Lastname Required'),
@@ -40,8 +39,30 @@ class SignUp extends React.Component {
       modalVisible:false,
       formData:{},
       isModal:false,
-      openSetting:false
+      openSetting:false,
+      jwtToken:null,
+      userInfo:{},
+      isImageSelected:false
     }
+  }
+
+  componentDidMount(){
+
+    SecureStore.getItemAsync('jwt_key')
+    .then((data)=>{
+     let token=data;
+    // console.log(token);
+      this.setState({jwtToken:token});
+    })
+    .catch((err)=>console.warn(err));
+
+    // this.setState({
+    //   userInfo:JSON.parse(this.props.navigation.getParam('user',''))
+    // });
+    this.setState({
+      profile_image:this.props.navigation.getParam('profilepic')
+    });
+
   }
 
   
@@ -52,16 +73,39 @@ class SignUp extends React.Component {
       alert("Permission to access camera roll is required");
       return;
     }
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    this.setState({profile_image:pickerResult});
-    console.log(pickerResult);
+   // console.log(this.state.profile_image);
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({base64:true,quality:1});
+   
+  // console.log(pickerResult);
+if(!pickerResult.cancelled)
+  { 
+    //console.log('Setting');
+    let base64img=`data:image/jpg;base64,${pickerResult.base64}`;
+    this.setState({profile_image:pickerResult.uri,
+    isImageSelected:true});
+    this.handleUploadPhoto(base64img);
+  }
   }
 
-  handleUploadPhoto = () => {
-    fetch("http://localhost:19006/api/upload",{
+  handleUploadPhoto = (base64img) => {
+    let data = {
+      "file": base64img,
+      "upload_preset": "xdeb7miu",
+    }
+    fetch(CLOUDINARY_URL, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
       method: 'POST',
-      body: createFormData(this.state.profile_image, { userId: '123'})
-    })
+    }).then(async r => {
+      let data = await r.json();
+      console.log(data);
+
+//Here I'm using another hook to set State for the photo that we get back //from Cloudinary
+//console.log(data.url);
+      this.setState({profile_image:data.url});
+    }).catch(err => console.log(err))
   }
 
   proceedToSubmit=()=>{
@@ -82,7 +126,7 @@ class SignUp extends React.Component {
        // alert('Permission to access location was denied');
         this.setState({
           isModal:true
-        })
+        });
         
       }
 
@@ -118,6 +162,7 @@ formSubmit(values)
     modalVisible:!this.state.modalVisible
 
   });
+ // console.log(this.state.formData);
 }
 
 opensettings=()=>{
@@ -131,19 +176,71 @@ opensettings=()=>{
 
 }
 
-postData()
+postData=()=>
 {
   this.state.formData.home_location={
     'latitude':this.state.lat,
     'longitude':this.state.lon
   };
+  this.state.formData.newid=false;
+this.state.formData.profile_pic=this.state.profile_image;
 
-  alert(JSON.stringify(this.state.formData));
-  this.props.navigation.navigate('Dash');
+//console.log(this.state.formData);
+
+fetch(baseURL+'/users/login',{
+  method:'PUT',
+  headers:{
+    'Content-Type':'application/json',
+    'Authorization':'Bearer '+this.state.jwtToken
+  },
+  credentials:'same-origin',
+  body:JSON.stringify(this.state.formData)
+})
+.then(response=>{
+  if(response.ok)
+  return response;
+  else
+  {
+      var error=new Error('Error'+response.status+':'+response.statusText);
+      error.response=response;
+      throw error;
+  }
+},
+error=>{
+  var errormess=new Error(error.message);
+  throw errormess;
+})
+.then((response)=>response.json())
+.then((data)=>{
+  console.log(data);
+  if(data.status==='success')
+  {
+    
+    this.props.navigation.navigate('Dash');
+    
+  }
+  else
+  {
+    alert('Check your Internet connection');
+  }
+})
+.catch((err)=>
+  {
+    Toast.show({
+      text:err,
+      buttonText:'OKAY',
+      type:'danger',
+      duration:2000
+    });
+    console.log(err);
+  })
+
+  
 }
 
-  render(props) {
-    const {profile_image} = this.state;
+  render() {
+    
+  // const {profile_image}=this.state;
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
          <Modal 
@@ -186,10 +283,10 @@ postData()
         <View style={styles.innerContainer}>
           <ScrollView style={{opacity:10,width:'100%'}}>
             <View style={{justifyContent:'center',alignItems:'center'}}>
-            {profile_image ? 
+            {this.state.profile_image ? 
               <View>
               <Image
-              source={{uri: profile_image.uri}}
+              source={this.state.isImageSelected ?{uri:this.state.profile_image}:{uri:this.state.profile_image}}
               style={{width:100, height:100, borderRadius:50}}
               /> 
              
@@ -205,7 +302,7 @@ postData()
             </View>
             <View style={{width:'100%',alignItems:'center',justifyContent:'center',marginBottom:'2%'}}>
                     <Formik 
-                      initialValues={{ firstname: '', lastname: '', occupation:'', email:'', phone_number:'' }}
+                      initialValues={{ first_name: '', last_name: '', occupation:'', email:'', mobile:'' }}
                       onSubmit={(values)=> { this.formSubmit(values)}}
                       validationSchema={SignupSchema}
                       >
@@ -217,21 +314,21 @@ postData()
                             placeholder='First Name'
                             placeholderTextColor='black'
                             validate
-                            onChangeText={handleChange('firstname')}
-                            onBlur={handleBlur('firstname')}
-                            value={values.firstname}
+                            onChangeText={handleChange('first_name')}
+                            onBlur={handleBlur('first_name')}
+                            value={values.first_name}
                             />
-                              {errors.firstname && touched.firstname ? (
-                                <Text style={{fontSize:10, color:'red'}}>{errors.firstname}</Text>
+                              {errors.first_name && touched.first_name ? (
+                                <Text style={{fontSize:10, color:'red'}}>{errors.first_name}</Text>
                               ) : null}
                             <TextInput
                             style={styles.input}
                             placeholder='Last Name'
                             placeholderTextColor='black'
-                            onChangeText={handleChange('lastname')}
+                            onChangeText={handleChange('last_name')}
                             />
-                              {errors.lastname && touched.lastname ? (
-                                <Text style={{fontSize:10, color:'red'}}>{errors.lastname}</Text>
+                              {errors.last_name && touched.last_name ? (
+                                <Text style={{fontSize:10, color:'red'}}>{errors.last_name}</Text>
                               ) : null}
                             <TextInput
                             style={styles.input}
@@ -256,9 +353,9 @@ postData()
                             placeholder='Phone Number'
                             placeholderTextColor='black'
                             keyboardType='numeric'
-                            onChangeText={handleChange('phone_number')}
-                            onBlur={handleBlur('phone_number')}
-                            value={values.phone_number}
+                            onChangeText={handleChange('mobile')}
+                            onBlur={handleBlur('mobile')}
+                            value={values.mobile}
                             />
                           
                           {

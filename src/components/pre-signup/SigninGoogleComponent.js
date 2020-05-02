@@ -1,11 +1,13 @@
 import React ,{Component} from 'react';
 import { View,Text, Image, StyleSheet } from 'react-native';
-import { Button } from 'native-base';
+import { Button ,Toast} from 'native-base';
 import * as firebase from 'firebase';
 // import {AntDesign} from 'react-native-vector-icons';
 // import * as Google from "expo-google-app-auth";
 import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {baseURL} from '../assests/reuse/baseUrl';
+import * as SecureStore from 'expo-secure-store';
 
 
 class GoogleSign extends Component{
@@ -24,86 +26,102 @@ class GoogleSign extends Component{
   androidClientId:'30917214910-0h41jb5s11tm1oadn00v214cqi567t4c.apps.googleusercontent.com'
     });
   }
-
-  isUserEqual=(googleUser, firebaseUser)=> {
-    if (firebaseUser) {
-      var providerData = firebaseUser.providerData;
-      for (var i = 0; i < providerData.length; i++) {
-        if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-            providerData[i].uid === googleUser.getBasicProfile().getId()) {
-          // We don't need to reauth the Firebase connection.
-          return true;
-        }
-      }
+onSignIn=(userInfo)=>{
+  let id_token=userInfo.idToken;
+  fetch(baseURL+'/users/login',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+id_token
+    },
+    credentials:'same-origin'
+  })
+  .then(response=>{
+    if(response.ok)
+    return response;
+    else
+    {
+        var error=new Error('Error'+response.status+':'+response.statusText);
+        error.response=response;
+        throw error;
     }
-    return false;
+},
+error=>{
+    var errormess=new Error(error.message);
+    throw errormess;
+})
+.then((response)=>response.json())
+.then((data)=>{
+  SecureStore.setItemAsync('jwt_key',data.token)
+  .catch((err)=>console.warn(err));
+  console.log(data);
+  if(data.status==0 && !data.user.newid)
+  {
+      this.props.navigation.navigate('Dash',{user:JSON.stringify(data.user)});
+  }
+  else if(data.status==1 && data.user.newid)
+  {
+    this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
+  }
+  else
+  {
+    this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
   }
 
- onSignIn=(googleUser)=> {
-  //  console.log('Google Auth Response', googleUser);
-    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-    var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
-      unsubscribe();
-      // Check if we are already signed-in Firebase with the correct user.
-      if (!this.isUserEqual(googleUser, firebaseUser)) {
-        // Build Firebase credential with the Google ID token.
-        var credential = firebase.auth.GoogleAuthProvider.credential(
-          googleUser.idToken,
-          googleUser.accessToken 
-          );
-        // Sign in with credential from the Google user.
-        firebase.auth().signInWithCredential(credential)
-        .then((result)=>{
-          console.log('user signed in');
-
-          console.log(result.additionalUserInfo.isNewUser);
-          if(result.additionalUserInfo.isNewUser)
-            {
-                this.props.navigation.navigate('Sign',{result:result});
-            }
-            else if(!result.additionalUserInfo.isNewUser)
-            {
-                this.props.navigation.navigate('Dash',{result:result});
-            }
-
-         
-
-        })
-        .catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          // ...
-        });
-      } else {
-        console.log('User already signed-in Firebase.');
-        this.props.navigation.navigate('Swipe');
-      }
-    }.bind(this));
-  }
-
+})
+  .catch((err)=>
+  {
+    Toast.show({
+      text:err,
+      buttonText:'OKAY',
+      type:'danger',
+      duration:2000
+    });
+    console.log(err);
+  })
+}
+  
 
   signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       //this.setState({ userInfo });
-      console.log(userInfo);
+      //console.log(userInfo);
       this.onSignIn(userInfo);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
+        Toast.show({
+          text:'Sign In Cancelled',
+          buttonText:'OKAY',
+          type:'danger',
+          duration:2000
+        });
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
+        Toast.show({
+          text:err,
+          buttonText:'OKAY',
+          duration:2000
+        });
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
+        Toast.show({
+          text:'Google play services not available',
+          buttonText:'OKAY',
+          type:'danger',
+          duration:2000
+        });
       } else {
         // some other error happened
         console.log(error);
+        Toast.show({
+          text:error,
+          buttonText:'OKAY',
+          type:'danger',
+          duration:2000
+        });
       }
     }
   };
@@ -113,7 +131,7 @@ class GoogleSign extends Component{
         return(
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
               <Image  style={{width:250,height:250,marginVertical:30}}  source={require('../assests/images/Stay-Home.png')}/>
-               <Button style={styles.gbtn} info rounded onPress={()=>this.props.navigation.navigate('Sign')} >
+               <Button style={styles.gbtn} info rounded onPress={()=>this.signIn()} >
                   <AntDesign size={32} color='white' name="google"/> 
                   <Text style={{marginHorizontal:5,fontWeight:'bold',color:'white',marginBottom:2}}>SIGN IN WITH GOOGLE</Text>
                </Button>
