@@ -1,19 +1,130 @@
 import React ,{Component} from 'react';
-import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions } from 'react-native';
+import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions ,AsyncStorage} from 'react-native';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
 import BackModule from '../assests/reuse/BgModule';
+import * as Location from 'expo-location';
+import {baseURL} from '../assests/reuse/baseUrl';
+import * as SecureStore from 'expo-secure-store';
+
 
 const {height,width}=Dimensions.get('window');
 
 class Dashboard extends Component{
+
+    constructor(props)
+    {
+        super(props);
+        this.state={
+            isLocationEnabled:false,
+            jwtToken:null,
+            isStorage:false,
+            isStorageCalled:false
+        }
+    }
+    
+    componentDidUpdate()
+    {
+        if(!this.state.isStorage)
+        this.checkStorage();
+        
+        
+
+
+        
+    }
+
+      componentDidMount()
+      {
+        SecureStore.getItemAsync('jwt_key')
+        .then((data)=>{
+         let token=data;
+       //  console.log(token);
+          this.setState({jwtToken:token});
+        })
+        .catch((err)=>console.warn(err));
+
+        this.locationStatus();
+      }
+
+      checkStorage=()=>{
+
+        AsyncStorage.getItem('userinfo',(err,result)=>{
+            if(result)
+            {
+               // console.log(result);
+                this.setState({isStorage:true})
+                
+            }
+            else
+            {
+                this.setState({isStorage:false})
+                if(!this.state.isStorageCalled)
+               { //console.log(err);
+                this.setStorage();
+               }
+            }
+        })
+
+      }
+
+      setStorage=()=>{
+        fetch(baseURL+'/users/login',{
+            method:'GET',
+            headers:{
+                'Authorization':'Bearer '+this.state.jwtToken
+            }
+        })
+        .then(response=>{
+            if(response.ok)
+            return response;
+            else
+            {
+                var error=new Error('Error'+response.status+':'+response.statusText);
+                error.response=response;
+                throw error;
+            }
+          },
+          error=>{
+            var errormess=new Error(error.message);
+            throw errormess;
+          })
+          .then((response)=>response.json())
+          .then((data)=>{
+              //console.log(data);
+              let userinfo=data.user;
+
+              AsyncStorage.setItem('userinfo',JSON.stringify(userinfo))
+              .then((data)=>{
+                 // console.log(data);
+              },(err)=>console.log(err))
+
+          },(err)=>console.log(err))
+          .catch((err)=>{console.warn(err.message);return;});
+
+
+      }
+
+      locationStatus=async()=>{
+        let {status}=await Location.getPermissionsAsync();
+  
+      //  console.log(status);
+    
+        if(status==='granted')
+        {
+         // console.log('Status chnaged');
+          this.setState({
+            isLocationEnabled:true
+          });
+        }
+      }
     render()
     {
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
                 <LocationModule/>
-                <BackModule/>
+                {this.state.isLocationEnabled && this.state.isStorage && <BackModule/> }
                 <View style={styles.container}>
                     <View style={styles.titleImage}>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>

@@ -54,7 +54,7 @@ error=>{
 .then((data)=>{
   SecureStore.setItemAsync('jwt_key',data.token)
   .catch((err)=>console.warn(err));
-  console.log(data);
+ // console.log(data);
   if(data.status==0 && !data.user.newid)
   {
       this.props.navigation.navigate('Dash',{user:JSON.stringify(data.user)});
@@ -71,12 +71,6 @@ error=>{
 })
   .catch((err)=>
   {
-    Toast.show({
-      text:err,
-      buttonText:'OKAY',
-      type:'danger',
-      duration:2000
-    });
     console.log(err);
   })
 }
@@ -92,36 +86,16 @@ error=>{
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
-        Toast.show({
-          text:'Sign In Cancelled',
-          buttonText:'OKAY',
-          type:'danger',
-          duration:2000
-        });
+        alert('Sign in cancelled ! Retry again');
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
-        Toast.show({
-          text:err,
-          buttonText:'OKAY',
-          duration:2000
-        });
+        alert('SignIn in Progress');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
-        Toast.show({
-          text:'Google play services not available',
-          buttonText:'OKAY',
-          type:'danger',
-          duration:2000
-        });
+        alert('Google play services not Found !');
       } else {
         // some other error happened
         console.log(error);
-        Toast.show({
-          text:error,
-          buttonText:'OKAY',
-          type:'danger',
-          duration:2000
-        });
       }
     }
   };
