@@ -1,38 +1,40 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import AnimatedLoader from "react-native-animated-loader";
+import { StyleSheet ,View} from 'react-native';
+
+import LottieView from 'lottie-react-native';
  
 export default class Loader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { visible: false };
-  }
- 
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        visible: !this.state.visible
-      });
-    }, 30000);
+
+  componentDidMount()
+  {
+    this.animation.play();
   }
  
   render() {
-    const { visible } = this.state;
+   
     return (
-      <AnimatedLoader
-        visible={visible}
-        overlayColor="rgba(255,255,255,0.75)"
-        source={require("../images/21166-covid-19-virus.json")}
-        animationStyle={styles.lottie}
-        speed={1}
-      />
+      <View style={styles.container}>
+        <LottieView source={require('../images/21166-covid-19-virus.json')} 
+         ref={animation => {
+          this.animation = animation;
+        }}
+        style={styles.lottie}
+         autoplay 
+         loop/>
+      </View>
     );
   }
 }
  
 const styles = StyleSheet.create({
+  container: {   
+     flex: 1,  
+      justifyContent: 'center',   
+       alignItems: 'center',   
+        backgroundColor: '#F5FCFF', 
+       },
   lottie: {
-    width: 100,
-    height: 100
+    width: 200,
+    height: 200
   }
 });

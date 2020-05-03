@@ -13,6 +13,14 @@ import Loader from '../../components/assests/reuse/loadingScreen';
 
 class GoogleSign extends Component{
 
+  constructor(props)
+  {
+    super(props);
+    this.state={
+      isLoading:false
+    }
+  }
+
   componentDidMount()
   {
     GoogleSignin.configure({
@@ -28,6 +36,7 @@ class GoogleSign extends Component{
     });
   }
 onSignIn=(userInfo)=>{
+  this.setState({isLoading:!this.state.isLoading});
   let id_token=userInfo.idToken;
   fetch(baseURL+'/users/login',{
     method:'POST',
@@ -58,14 +67,12 @@ error=>{
  // console.log(data);
   if(data.status==0 && !data.user.newid)
   {
-      this.props.navigation.navigate('Dash',{user:JSON.stringify(data.user)});
+    this.setState({isLoading:!this.state.isLoading});
+      this.props.navigation.navigate('Dash');
   }
   else if(data.status==1 && data.user.newid)
   {
-    this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
-  }
-  else
-  {
+    this.setState({isLoading:!this.state.isLoading});
     this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
   }
 
@@ -104,6 +111,12 @@ error=>{
 
     render()
     {
+      if(this.state.isLoading)
+      {
+        return <Loader/>
+      }
+      else
+      {
         return(
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
               <Image  style={{width:250,height:250,marginVertical:30}}  source={require('../assests/images/Stay-Home.png')}/>
@@ -113,6 +126,7 @@ error=>{
                </Button>
             </View>
         )
+      }
     }
 }
 

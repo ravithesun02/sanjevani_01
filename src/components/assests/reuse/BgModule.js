@@ -300,7 +300,7 @@ const optionsLoc={
       let token=data;
       // console.log(token);
         jwt_token=token;
-        console.log(jwt_token);
+       // console.log(jwt_token);
       })
       .catch((err)=>console.warn(err));
 

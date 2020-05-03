@@ -4,7 +4,6 @@ import Main from './src/MainComponent';
 import * as firebase from 'firebase';
 import {Root} from 'native-base';
 
-
 import {firebaseConfig } from './config';
 
 firebase.initializeApp(firebaseConfig);

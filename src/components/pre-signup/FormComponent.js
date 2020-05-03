@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput,StyleSheet, Text, ImageBackground,Image, ListView, ScrollView,Modal} from 'react-native'
+import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator, ListView, ScrollView,Modal} from 'react-native'
 import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
@@ -12,6 +12,7 @@ import LocationModule from '../assests/reuse/LocationComponent';
 import {openSettings} from 'react-native-send-intent';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
+import Loader from '../assests/reuse/loadingScreen';
 
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dzixwmfmz/upload';
 
@@ -42,7 +43,9 @@ class SignUp extends React.Component {
       openSetting:false,
       jwtToken:null,
       userInfo:{},
-      isImageSelected:false
+      isImageSelected:false,
+      isImageUploading:false,
+      isLoading:false
     }
   }
 
@@ -82,7 +85,8 @@ if(!pickerResult.cancelled)
     //console.log('Setting');
     let base64img=`data:image/jpg;base64,${pickerResult.base64}`;
     this.setState({profile_image:pickerResult.uri,
-    isImageSelected:true});
+    isImageSelected:true,isImageUploading:true});
+    
     this.handleUploadPhoto(base64img);
   }
   }
@@ -100,11 +104,11 @@ if(!pickerResult.cancelled)
       method: 'POST',
     }).then(async r => {
       let data = await r.json();
-      console.log(data);
+     // console.log(data);
 
 //Here I'm using another hook to set State for the photo that we get back //from Cloudinary
 //console.log(data.url);
-      this.setState({profile_image:data.url});
+      this.setState({profile_image:data.url,isImageUploading:false});
     }).catch(err => console.log(err))
   }
 
@@ -178,6 +182,7 @@ opensettings=()=>{
 
 postData=()=>
 {
+  this.setState({isLoading:true});
   this.state.formData.home_location={
     'latitude':this.state.lat,
     'longitude':this.state.lon
@@ -215,7 +220,7 @@ error=>{
   //console.log(data);
   if(data.status==='success')
   {
-    
+    this.setState({isLoading:false});
     this.props.navigation.navigate('Dash');
     
   }
@@ -239,8 +244,10 @@ error=>{
 }
 
   render() {
-    
-  // const {profile_image}=this.state;
+
+    if(this.state.isLoading)
+      return <Loader/>
+else
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
          <Modal 
@@ -258,6 +265,17 @@ error=>{
 
                     </View>
                 </View>
+
+            </Modal>
+            <Modal
+            visible={this.state.isImageUploading}
+            transparent={true}
+            animationType='fade'
+            >
+              <View style={styles.centeredView}>
+              <ActivityIndicator size="large" color="#0000ff" />
+              <Text style={{fontSize:16,fontWeight:'bold'}}>Uploading .....</Text>
+              </View>
 
             </Modal>
         
