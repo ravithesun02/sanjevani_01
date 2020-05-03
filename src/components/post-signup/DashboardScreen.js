@@ -20,56 +20,57 @@ class Dashboard extends Component{
             isLocationEnabled:false,
             jwtToken:null,
             isStorage:false,
-            isStorageCalled:false
+            statusLocation:'denied'
         }
     }
     
     componentDidUpdate()
     {
-        if(!this.state.isStorage)
-        this.checkStorage();
-        
-        
-
-
-        
+        if(this.state.isStorage && !this.state.isLocationEnabled && this.state.statusLocation==='denied')
+        this.locationStatus();
     }
 
-      componentDidMount()
+     async componentDidMount()
       {
-        SecureStore.getItemAsync('jwt_key')
-        .then((data)=>{
-         let token=data;
-       //  console.log(token);
-          this.setState({jwtToken:token});
-        })
-        .catch((err)=>console.warn(err));
+          try
+          {
+            let token = await  SecureStore.getItemAsync('jwt_key');
+            this.setState({jwtToken:token});
+          }
+          catch(error)
+          {
+              console.log(error);
+          }
+ 
 
-        this.locationStatus();
+            this.checkStorage();
+
+       
       }
 
-      checkStorage=()=>{
+      checkStorage= async ()=>{
 
-        AsyncStorage.getItem('userinfo',(err,result)=>{
-            if(result)
+
+        try{
+            let value=await AsyncStorage.getItem('userinfo');
+            if(value == null)
             {
-               // console.log(result);
-                this.setState({isStorage:true})
-                
+                this.setStorage();
             }
             else
             {
-                this.setState({isStorage:false})
-                if(!this.state.isStorageCalled)
-               { //console.log(err);
-                this.setStorage();
-               }
+                this.setState({isStorage:true});
             }
-        })
+        }
+        catch(error)
+        {
+            console.log(error);
+            this.setStorage();
+        }
 
       }
 
-      setStorage=()=>{
+      setStorage=async()=>{
         fetch(baseURL+'/users/login',{
             method:'GET',
             headers:{
@@ -91,14 +92,21 @@ class Dashboard extends Component{
             throw errormess;
           })
           .then((response)=>response.json())
-          .then((data)=>{
+          .then(async(data)=>{
               //console.log(data);
               let userinfo=data.user;
-
-              AsyncStorage.setItem('userinfo',JSON.stringify(userinfo))
-              .then((data)=>{
-                 // console.log(data);
-              },(err)=>console.log(err))
+            try{
+                await AsyncStorage.setItem('userinfo',JSON.stringify(userinfo));
+                console.log('stored');
+                this.setState({isStorage:true});
+               
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+              
+              
 
           },(err)=>console.log(err))
           .catch((err)=>{console.warn(err.message);return;});
@@ -109,7 +117,8 @@ class Dashboard extends Component{
       locationStatus=async()=>{
         let {status}=await Location.getPermissionsAsync();
   
-      //  console.log(status);
+       console.log(status);
+       this.setState({statusLocation:status});
     
         if(status==='granted')
         {
@@ -124,7 +133,7 @@ class Dashboard extends Component{
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
                 <LocationModule/>
-                {this.state.isLocationEnabled && this.state.isStorage && <BackModule/> }
+                {this.state.isLocationEnabled && <BackModule/> }
                 <View style={styles.container}>
                     <View style={styles.titleImage}>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>

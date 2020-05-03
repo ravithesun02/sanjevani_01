@@ -17,22 +17,20 @@ class SplashScreen extends Component{
         }
     }
 
-    componentDidMount(){
+   async componentDidMount(){
 
-        SecureStore.getItemAsync('jwt_key')
-        .then((data)=>{
-         let token=data;
-        // console.log(token);
+      let token = await  SecureStore.getItemAsync('jwt_key');
+     
+      //  console.log(token);
           this.setState({jwtToken:token});
-        })
-        .catch((err)=>console.warn(err));
+     
 
         this.checkIfLoggedIn();
     }
 
 
     checkIfLoggedIn= async ()=>{
-       // console.log(this.state.jwtToken);
+      // console.log('In logged in ()',this.state.jwtToken);
 
         if(this.state.jwtToken)
         {

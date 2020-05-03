@@ -292,25 +292,28 @@ const optionsLoc={
       this.toggleBackground();
     }
   
-    componentDidMount(){
-      //this.toggleBackground();
-     // console.log('mounted');
-      SecureStore.getItemAsync('jwt_key')
-      .then((data)=>{
-      let token=data;
-      // console.log(token);
-        jwt_token=token;
-       // console.log(jwt_token);
-      })
-      .catch((err)=>console.warn(err));
+   async componentDidMount(){
+            try
+            {
+              let token = await  SecureStore.getItemAsync('jwt_key');
+              jwt_token=token;
+            //  console.log(jwt_token);
+            }
+            catch(error)
+            {
+              console.log(error);
+            }
+          
 
-      this.getStorage();
+            this.getStorage();
 
-     
+          
      
     }
 
-    getStorage=()=>{
+    getStorage=async()=>{
+
+
       AsyncStorage.getItem('userinfo',(err,data)=>{
         if(err)
         {
