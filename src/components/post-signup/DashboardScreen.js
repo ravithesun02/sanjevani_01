@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions ,AsyncStorage} from 'react-native';
+import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions ,AsyncStorage,ActivityIndicator} from 'react-native';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
@@ -8,6 +8,8 @@ import * as Location from 'expo-location';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
+import WebView from 'react-native-webview';
+import AutoHeightWebView from 'react-native-autoheight-webview'
 
 
 const {height,width}=Dimensions.get('window');
@@ -25,7 +27,8 @@ class Dashboard extends Component{
             isStorage:false,
             statusLocation:'denied',
             userState:'',
-            isLoading:false
+            isLoading:false,
+            webViewLoading:true
 
         }
     }
@@ -188,8 +191,34 @@ class Dashboard extends Component{
           });
         }
       }
+      ActivityIndicatorLoadingView() {
+        //making a view to show to while loading the webpage
+        return (
+          <ActivityIndicator
+             color="#009688"
+             size="large"
+             style={styles.ActivityIndicatorStyle}
+          />
+        );
+     }
     render()
     {
+
+        const INJECTED_JS=`(function(){
+
+            document.querySelectorAll('.col-lg-12').forEach((item)=>{
+                item.remove();
+            });
+            document.querySelector('.navbar').remove();
+            document.querySelector('.col-md-8').remove();
+            document.body.style.background = 'transparent';
+            document.querySelectorAll('a').forEach((item)=>{
+                item.remove()
+            });
+
+
+        })();`;
+
         if(this.state.isLoading)
         {
             return <Loader/>
@@ -204,15 +233,28 @@ else
                     <View style={styles.titleImage}>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
                     </View>
+                    <ScrollView>
                     <View style={styles.title}>
                         <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
-                        <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {Data.lastFetch}  </Text>
+                        <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
                     </View>
-                    <View style={{justifyContent:'flex-end',flexDirection:'row',marginTop:'4%'}}>
-                        <Text style={{marginHorizontal:'8%',fontSize:16,fontWeight:'bold'}}>Across India</Text>
-                          <Text style={{marginRight:'9%',fontSize:16,fontWeight:'bold'}}> {this.state.userState} </Text>
+                    {/* <View style={{justifyContent:'flex-end',flexDirection:'row',marginTop:'4%'}}>
+                        <Text style={{marginRight:'8%',alignItems:'center',fontSize:16,fontWeight:'bold'}}>Across India</Text>
+                          <Text style={{fontSize:16,marginRight:'7%',alignItems:'center',fontWeight:'bold'}}> {this.state.userState} </Text>
+                    </View> */}
+                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
+                            <View style={{ flex: 1,justifyContent:'center',alignItems:'center',opacity:0 }}>
+                                <Text style={{fontSize:15,fontWeight:'bold',color:'blue'}}>Confirmed Cases</Text>
+                            </View>
+                            <View style={{ flex: 1 ,justifyContent:'center',alignItems:'center'}}>
+                            <Text style={{alignItems:'center',fontSize:16,fontWeight:'bold'}}>Across India</Text>
+                            </View>
+                            <View style={{ flex: 1,alignItems:'center',justifyContent:'center'}}>
+                            <Text style={{fontSize:16,alignItems:'center',fontWeight:'bold'}}> {this.state.userState} </Text>
+                            </View>
                     </View>
-                    <View style={{ flex: 1,marginTop:'3%',justifyContent:'space-around', flexDirection: 'row'}}>
+                    <View style={{flex:1,justifyContent:'center',marginBottom:'2%', alignItems:'center'}}>
+                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
                                 <Text style={{fontSize:15,fontWeight:'bold',color:'blue'}}>Confirmed Cases</Text>
                             </View>
@@ -223,7 +265,7 @@ else
                                 <Text> {Data.sn_confirmed} </Text>
                             </View>
                     </View>
-                    <View style={{ flex: 1,marginTop:'3%',justifyContent:'space-around', flexDirection: 'row'}}>
+                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
                                 <Text style={{fontSize:15,fontWeight:'bold',color:'orange'}}>Active Cases</Text>
                             </View>
@@ -234,7 +276,7 @@ else
                                 <Text> {Data.sn_active} </Text>
                             </View>
                     </View>
-                    <View style={{ flex: 1,marginTop:'3%',justifyContent:'space-around', flexDirection: 'row'}}>
+                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
                                 <Text style={{fontSize:15,fontWeight:'bold',color:'green'}}>Recovered Cases</Text>
                             </View>
@@ -245,7 +287,7 @@ else
                                 <Text> {Data.sn_recovered} </Text>
                             </View>
                     </View>
-                    <View style={{ flex: 1,marginTop:'3%',justifyContent:'space-around', flexDirection: 'row'}}>
+                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
                                 <Text style={{fontSize:15,fontWeight:'bold',color:'red'}}>Death Cases</Text>
                             </View>
@@ -256,11 +298,32 @@ else
                                 <Text> {Data.sn_deaths} </Text>
                             </View>
                     </View>
-                    <ScrollView>
+                    </View>
+                    
                     <View style={styles.insideContainer}>
-                        <Image style={{height:350,width:350}} source={require('../assests/images/Stay-Safe.png')}/>
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignSelf:'center',alignItems:'center'}}>
+                        <Image style={{width:'100%',height:'100%'}}  source={require('../assests/images/Stay-Safe.png')}/>
+                        </View>
+                        
 
                     </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'grey',borderRadius:20,elevation:5,padding:10,margin:10}}>
+                        <Text style={{fontSize:20,fontWeight:'bold'}}>LATEST NEWS</Text>
+
+                    </View>
+
+                    <View style={{flex:1}}>
+                            <AutoHeightWebView customScript={INJECTED_JS} source={{uri:'https://corona-go.info'}}   javaScriptEnabled={true}
+                                domStorageEnabled={true}
+                                startInLoadingState={true}
+                            scalesPageToFit={true} onLoadEnd={()=>this.setState({webViewLoading:false})} />
+                                {this.state.webViewLoading &&   <ActivityIndicator
+                                color="#009688"
+                                size="large"
+                                style={styles.ActivityIndicatorStyle}
+                            />}
+                            
+                        </View>
 
                     </ScrollView>
 
@@ -287,13 +350,26 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         marginTop:10,
+        elevation:5,
+        paddingBottom:5
        
     },
     insideContainer:{
         flex:1,
         justifyContent:'center',
         alignItems:'center'
-    }
+    },
+    video: {
+        marginTop: 20,
+        height: 1000,
+        width:width,
+        flex: 1,
+        elevation:5
+      },
+      ActivityIndicatorStyle: {
+        flex: 1,
+        justifyContent: 'center',
+      }
 })
 
 
