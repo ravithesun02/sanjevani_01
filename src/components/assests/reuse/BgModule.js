@@ -173,16 +173,32 @@ const optionsLoc={
     .catch((err)=>console.log(err.message));
 
   }
+  configure = () => { 
+    PushNotification.configure({
+    onNotification: function(notification) {
+      console.log('LOCAL NOTIFICATION ==>', notification)
+    },
+  popInitialNotification: true,
+    requestPermissions: true
+  });
+}
+   firstLocalNotification = () => {
+    PushNotification.localNotification({
+      autoCancel: true,
+      bigText:'kha ja rha hai bhai',
+      subText: 'Local Notification Demo',
+      title: 'this is wrong',
+      message: 'this must be important',
+      color: 'red',
+      priority: "high",
 
-  PushNotification.configure(
-    {
-      onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
-      },
-      popInitialNotification: true,
-      requestPermissions: true,
-    }
-  )
+      vibrate: true,
+      vibration: 1000,
+      playSound: true,
+      soundName: 'default',
+      actions: '["Yes", "No"]'
+    })
+  }
 
   TaskManager.defineTask('LOCATION_TRACKER', ({ data, error }) => {
     if (error) {
@@ -203,13 +219,7 @@ const optionsLoc={
           if(counter==0)
           {
             //push notification here
-            PushNotification.localNotification({
-              title: "My Notification Title",
-              message: "My Notification Message",
-              vibrate: true,
-              vibration: 300,
-            })
-            
+            this.firstLocalNotification();
           //  console.log('Post process');
             postLocation(location);
             sleep(5000);
