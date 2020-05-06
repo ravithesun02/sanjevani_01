@@ -189,16 +189,20 @@ const optionsLoc={
       subText: 'Local Notification Demo',
       title: 'this is wrong',
       message: 'this must be important',
-      color: 'red',
+      color: "red",
       priority: "high",
 
       vibrate: true,
       vibration: 1000,
       playSound: true,
       soundName: 'default',
-      actions: '["Yes", "No"]'
     })
   }
+  PushNotification.localNotificationSchedule({
+    title: "stay safe",
+    message: "My Notification Message", // (required)
+    date: new Date(Date.now() + 60 * 12 * 60 * 1000), // in 60 secs
+  });
 
   TaskManager.defineTask('LOCATION_TRACKER', ({ data, error }) => {
     if (error) {

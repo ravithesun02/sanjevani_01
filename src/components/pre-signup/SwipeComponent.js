@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {  StyleSheet, Text, View,Image} from 'react-native';
-import {Button} from 'native-base';
+import {Button } from 'native-base';
 
 
 import Swiper from 'react-native-swiper/src'
@@ -67,6 +67,10 @@ export default class SwipeImage extends Component {
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>
           <Image style={{width:250,height:250}} source={require('../assests/images/Avoid-Crowd.png')}/>
           </View>
+          <View style={{backgroundColor:'#0000000', borderLeftWidth:5, borderRightWidth:5,width:250,height:50,marginTop:10,marginLeft:60}}>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>सामाजिक दूरी बनाने मे कोई गम नहीं,</Text>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>कोरोना जीत जाऐ उसमे इतनी दम नहीं।</Text>
+          </View>
           <View style={styles.skipbtn}>
             <Button transparent onPress={()=> this.props.navigation.navigate('SignIn')}>
               <Text style={styles.skipText}>SKIP</Text>
@@ -77,6 +81,10 @@ export default class SwipeImage extends Component {
         
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>
           <Image style={{width:250,height:250}} source={require('../assests/images/Hand-Wash.png')}/>
+          </View>
+          <View style={{backgroundColor:'#0000000', borderLeftWidth:5, borderRightWidth:5,width:250,height:50,marginTop:10,marginLeft:60}}>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>बार बार साबुन से धोना है हमे हाथ,</Text>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>कोरोना को भगाने मे ऐसे देना है साथ ।</Text>
           </View>
           <View style={styles.skipbtn}>
             <Button transparent onPress={()=>this.props.navigation.navigate('SignIn')}> 
@@ -89,6 +97,10 @@ export default class SwipeImage extends Component {
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>
           <Image style={{width:250,height:250}} source={require('../assests/images/Wear-Mask.png')}/>
           </View>
+          <View style={{backgroundColor:'#0000000', borderLeftWidth:5, borderRightWidth:5,width:250,height:50,marginTop:10,marginLeft:60}}>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>सामाजिक दूरी बनाने मे कोई गम नहीं,</Text>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>कोरोना जीत जाऐ उसमे इतनी दम नहीं।</Text>
+          </View>
           <View style={styles.skipbtn} onPress={()=> this.props.navigation.navigate('SignIn')}>
             <Button transparent>
               <Text style={styles.skipText}>SKIP</Text>
@@ -99,6 +111,10 @@ export default class SwipeImage extends Component {
          
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>
           <Image style={{width:250,height:250}} source={require('../assests/images/Social-Distancing.png')}/>
+          </View>
+          <View style={{backgroundColor:'#0000000', borderLeftWidth:5, borderRightWidth:5,width:250,height:50,marginTop:5,marginLeft:60}}>
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>जिंदगी एक सफ़र है सुहाना,</Text> 
+            <Text style={{textAlign:'center',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>मिलकर हमे कोरोना को है हराना।।</Text>
           </View>
           <View style={styles.Nextbtn}>
             <Button transparent onPress={()=> this.props.navigation.navigate('SignIn')}>
