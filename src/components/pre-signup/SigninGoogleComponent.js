@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import { View,Text, Image, StyleSheet } from 'react-native';
+import { View,Text, Image, StyleSheet,Dimensions,Animated, StatusBar } from 'react-native';
 import { Button ,Toast} from 'native-base';
 import * as firebase from 'firebase';
 // import {AntDesign} from 'react-native-vector-icons';
@@ -10,19 +10,21 @@ import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../../components/assests/reuse/loadingScreen';
 
-
+const {height,width}=Dimensions.get('window');
 class GoogleSign extends Component{
 
   constructor(props)
   {
     super(props);
     this.state={
-      isLoading:false
+      isLoading:false,
+      opacity:new Animated.Value(0)
     }
   }
 
   componentDidMount()
   {
+    
     GoogleSignin.configure({
       scopes: ["profile", "email"], // what API you want to access on behalf of the user, default is email and profile
   webClientId: '30917214910-kdsbjkejp0kgi4u4djup2615pvrqidv4.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -115,6 +117,14 @@ error=>{
     }
   };
 
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 1200,
+      useNativeDriver: true,
+    }).start();
+  }
+
     render()
     {
       if(this.state.isLoading)
@@ -123,13 +133,40 @@ error=>{
       }
       else
       {
+         
+    const animatedStyle = {
+ 
+      opacity: this.state.opacity,
+      transform: [
+        {
+          scale: this.state.opacity.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0.25, 1],
+          })
+        },
+      ]
+ 
+    }
         return(
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-              <Image  style={{width:250,height:250,marginVertical:30}}  source={require('../assests/images/Stay-Home.png')}/>
-               <Button style={styles.gbtn} info rounded onPress={()=>this.signIn()} >
+            <View style={{flex:1}}>
+              <StatusBar hidden/>
+              <View style={styles.logobg}>
+                <Animated.Image 
+                onLoad={this.onLoad()}
+                source={require('../assests/images/app_icon.png')}
+                style={[styles.logo,animatedStyle]}
+                />
+                <Animated.View style={[styles.textbg,animatedStyle]}>
+                <Text style={{textAlign:'center',color:'white',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>सुरक्षित हो जीवनी,</Text>
+                <Text style={{textAlign:'center',color:'white',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>जब साथ हो संजीवनी ।</Text>
+              </Animated.View>
+              </View>
+              <View style={styles.btnbg}>
+              <Button style={styles.gbtn} info rounded onPress={()=>this.signIn()} >
                   <AntDesign size={32} color='white' name="google"/> 
                   <Text style={{marginHorizontal:5,fontWeight:'bold',color:'white',marginBottom:2}}>SIGN IN WITH GOOGLE</Text>
                </Button>
+               </View>
             </View>
         )
       }
@@ -139,11 +176,38 @@ error=>{
 const styles=StyleSheet.create({
   gbtn:{
     backgroundColor:'#b23121',
-    width:210,
-    height:42,
+    padding:'4%',
     justifyContent:'center',
-    textAlign:'center'
+    textAlign:'center',
+    elevation:10
+    
    
+  },
+  logobg:{
+    height:height*0.8,
+    width:width,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'black',
+    borderBottomLeftRadius:10,
+    borderBottomRightRadius:10,
+    elevation:5
+  },
+  logo:{
+    width:200,
+    height:200
+    
+  },
+  textbg:{
+     
+    borderLeftWidth:5, 
+    borderRightWidth:5
+  },
+  btnbg:{
+    justifyContent:'center',
+    height:height*0.2,
+    width:width,
+    alignItems:'center'
   }
 })
 
