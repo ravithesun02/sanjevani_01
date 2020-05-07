@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { baseURL } from './baseUrl';
 import {AsyncStorage} from 'react-native';
 import haversine from 'haversine';
+import PushNotification from 'react-native-push-notification';
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 
@@ -172,7 +173,37 @@ const optionsLoc={
     .catch((err)=>console.log(err.message));
 
   }
-  
+  configure = () => { 
+    PushNotification.configure({
+    onNotification: function(notification) {
+      console.log('LOCAL NOTIFICATION ==>', notification)
+    },
+  popInitialNotification: true,
+    requestPermissions: true
+  });
+}
+   firstLocalNotification = () => {
+    PushNotification.localNotification({
+      autoCancel: true,
+      bigText:'kha ja rha hai bhai',
+      subText: 'Local Notification Demo',
+      title: 'this is wrong',
+      message: 'this must be important',
+      color: "red",
+      priority: "high",
+
+      vibrate: true,
+      vibration: 1000,
+      playSound: true,
+      soundName: 'default',
+    })
+  }
+  PushNotification.localNotificationSchedule({
+    title: "stay safe",
+    message: "My Notification Message", // (required)
+    date: new Date(Date.now() + 60 * 12 * 60 * 1000), // in 60 secs
+  });
+
   TaskManager.defineTask('LOCATION_TRACKER', ({ data, error }) => {
     if (error) {
      console.log(error.message);
@@ -192,6 +223,7 @@ const optionsLoc={
           if(counter==0)
           {
             //push notification here
+            this.firstLocalNotification();
           //  console.log('Post process');
             postLocation(location);
             sleep(5000);

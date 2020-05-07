@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.burnweb.rnsendintent.RNSendIntentPackage;
