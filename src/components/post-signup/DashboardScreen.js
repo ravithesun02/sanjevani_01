@@ -1,5 +1,6 @@
 import React ,{Component} from 'react';
-import { View, Text,Button, ImageBackground, StyleSheet,Image,Dimensions ,AsyncStorage,ActivityIndicator} from 'react-native';
+import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,AppState ,AsyncStorage,ActivityIndicator} from 'react-native';
+import {Button} from 'native-base';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
@@ -9,7 +10,7 @@ import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 import WebView from 'react-native-webview';
-import AutoHeightWebView from 'react-native-autoheight-webview'
+import AutoHeightWebView from 'react-native-autoheight-webview';
 
 
 const {height,width}=Dimensions.get('window');
@@ -28,7 +29,10 @@ class Dashboard extends Component{
             statusLocation:'denied',
             userState:'',
             isLoading:false,
-            webViewLoading:true
+            webViewLoading:true,
+            currentTab:0,
+            opacity:new Animated.Value(0),
+            appState:AppState.currentState
 
         }
     }
@@ -86,8 +90,14 @@ class Dashboard extends Component{
         this.locationStatus();
     }
 
+
+  componentWillUnmount() {
+   // AppState.removeEventListener('change',this._handleAppStateChange());
+  }
+
      async componentDidMount()
       {
+      //  AppState.addEventListener('change',this._handleAppStateChange());
           this.setState({isLoading:true});
           try
           {
@@ -108,6 +118,17 @@ class Dashboard extends Component{
        //console.log(Data);
        this.setState({isLoading:false})
       }
+
+      _handleAppStateChange = (nextAppState) => {
+        if (
+          this.state.appState.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          console.log('App has come to the foreground!');
+          this.fetchData();
+        }
+        this.setState({appState: nextAppState});
+      };
 
       checkStorage= async ()=>{
 
@@ -201,6 +222,70 @@ class Dashboard extends Component{
           />
         );
      }
+
+     onLoad = () => {
+         this.state.opacity.setValue(0)
+        Animated.timing(this.state.opacity, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start();
+      }
+      
+     renderData=()=>{
+               
+    const animatedStyle = {
+ 
+        opacity: this.state.opacity
+   
+      }
+         if(this.state.currentTab==0)
+         {
+             return (
+                 <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
+                     <View style={styles.textData}>
+                        <Text style={{fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                        <Text style={{marginRight:'10%',fontSize:16}}>{Data.cn_confirmedcases}</Text>
+                     </View>
+                     <View style={styles.textData}>
+                        <Text style={{fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                        <Text style={{marginRight:'10%',fontSize:16}}> {Data.cn_active} </Text>
+                     </View>
+                     <View style={styles.textData}>
+                        <Text style={{fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                        <Text style={{marginRight:'10%',fontSize:16}}>{Data.cn_recovered}</Text>
+                     </View>
+                     <View style={styles.textData}>
+                        <Text style={{fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                        <Text style={{marginRight:'10%',fontSize:16}}> {Data.cn_deaths} </Text>
+                     </View>
+                 </Animated.View>
+             )
+         }
+         else
+         {
+             return(
+                <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
+                <View style={styles.textData}>
+                   <Text style={{fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                   <Text style={{marginRight:'10%',fontSize:16,}}> {Data.sn_confirmed} </Text>
+                </View>
+                <View style={styles.textData}>
+                   <Text style={{fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                   <Text style={{marginRight:'10%',fontSize:16}}> {Data.sn_active} </Text>
+                </View>
+                <View style={styles.textData}>
+                   <Text style={{fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                   <Text style={{marginRight:'10%',fontSize:16}}> {Data.sn_recovered} </Text>
+                </View>
+                <View style={styles.textData}>
+                   <Text style={{fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                   <Text style={{marginRight:'10%',fontSize:16}}> {Data.sn_deaths} </Text>
+                </View>
+                </Animated.View>
+             )
+         }
+     }
     render()
     {
 
@@ -238,11 +323,29 @@ else
                         <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
                     </View>
+
+                    <View style={{flex:1,marginTop:10,padding:5}}>
+                    <View style={{flexDirection:'row',alignItems:'stretch'}}>
+                        <Button transparent onPress={()=>this.setState({currentTab:0})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===0 ? 2:0,width:'50%',justifyContent:'center'}}>
+                            <Text style={{color:this.state.currentTab===0 ? 'black':'grey',fontWeight:this.state.currentTab===0 ? 'bold':'normal',letterSpacing:1}}>
+                                INDIA
+                            </Text>
+                        </Button>
+                        <Button transparent onPress={()=>this.setState({currentTab:1})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===1 ? 2:0,width:'50%',justifyContent:'center'}}>
+                            <Text style={{color:this.state.currentTab===1 ? 'black':'grey',fontWeight:this.state.currentTab===1 ? 'bold':'normal',letterSpacing:1}}>
+                                {this.state.userState.toUpperCase()}
+                            </Text>
+                        </Button>
+                    </View>
+
+                  {this.renderData()}
+
+                </View>
                     {/* <View style={{justifyContent:'flex-end',flexDirection:'row',marginTop:'4%'}}>
                         <Text style={{marginRight:'8%',alignItems:'center',fontSize:16,fontWeight:'bold'}}>Across India</Text>
                           <Text style={{fontSize:16,marginRight:'7%',alignItems:'center',fontWeight:'bold'}}> {this.state.userState} </Text>
                     </View> */}
-                    <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
+                    {/* <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center',opacity:0 }}>
                                 <Text style={{fontSize:15,fontWeight:'bold',color:'blue'}}>Confirmed Cases</Text>
                             </View>
@@ -256,7 +359,7 @@ else
                     <View style={{flex:1,justifyContent:'center',marginBottom:'2%', alignItems:'center'}}>
                     <View style={{ flex: 1,marginTop:'1%',justifyContent:'space-around', flexDirection: 'row'}}>
                             <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
-                                <Text style={{fontSize:15,fontWeight:'bold',color:'blue'}}>Confirmed Cases</Text>
+                                <Text >Confirmed Cases</Text>
                             </View>
                             <View style={{ flex: 1 ,justifyContent:'center',alignItems:'center'}}>
                                 <Text> {Data.cn_confirmedcases} </Text>
@@ -298,7 +401,7 @@ else
                                 <Text> {Data.sn_deaths} </Text>
                             </View>
                     </View>
-                    </View>
+                    </View> */}
                     
                     <View style={styles.insideContainer}>
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignSelf:'center',alignItems:'center'}}>
@@ -369,7 +472,13 @@ const styles=StyleSheet.create({
       ActivityIndicatorStyle: {
         flex: 1,
         justifyContent: 'center',
+      },
+      textData:{
+          flexDirection:'row',
+          justifyContent:'space-between',
+          marginTop:'3%'
       }
+
 })
 
 
