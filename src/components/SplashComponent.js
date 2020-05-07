@@ -13,9 +13,40 @@ class SplashScreen extends Component{
         super(props);
         this.state={
             isLoggedIn:false,
-            jwtToken:null
+            jwtToken:null,
+            isSignedIn:false,
+            profile_pic:null
         }
     }
+
+  
+    fetchGoogleUser=async()=>{
+        try
+        {
+         let response=await fetch(baseURL+'/users/login',{
+           method:'GET',
+           headers:{
+             'Authorization':'Bearer '+this.state.jwtToken
+           }
+         })
+         if(response.ok)
+         {
+           let data=await response.json();
+           if(!data.user.newid)
+                this.setState({isLoggedIn:true});
+            else 
+            this.setState({isSignedIn:true,profile_pic:data.user.profile_pic});
+          
+    
+         }
+    
+        }
+        catch(error)
+        {
+          console.log(error);
+        }
+        this.setState({isLoading:false});
+      }
 
    async componentDidMount(){
 
@@ -23,29 +54,39 @@ class SplashScreen extends Component{
      
       //  console.log(token);
           this.setState({jwtToken:token});
+
+          if(this.state.jwtToken)
+          {
+             await this.fetchGoogleUser();
+          }
      
 
-        this.checkIfLoggedIn();
+       await this.checkIfLoggedIn();
     }
 
 
     checkIfLoggedIn= async ()=>{
       // console.log('In logged in ()',this.state.jwtToken);
 
-        if(this.state.jwtToken)
+        if(this.state.isLoggedIn)
         {
            // console.log(this.state.jwtToken);
-            await sleep(2000);
+           
 
               this.props.navigation.navigate('Dash');
 
 
 
         }
+        else if(this.state.isSignedIn)
+        {
+           
+           this.props.navigation.navigate('Sign',{profilepic:this.state.profile_pic});
+        }
 
         else
         {
-            await sleep(2000);
+           
             this.props.navigation.navigate('Swipe');
         }
 

@@ -75,6 +75,12 @@ error=>{
     this.setState({isLoading:!this.state.isLoading});
     this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
   }
+  else
+  {
+
+    this.setState({isLoading:!this.state.isLoading});
+    this.props.navigation.navigate('Sign',{profilepic:data.user.profile_pic});
+  }
 
 })
   .catch((err)=>

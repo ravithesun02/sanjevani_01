@@ -9,22 +9,20 @@ import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
 import  Entypo from 'react-native-vector-icons/Entypo';
 import * as Location from 'expo-location';
 import LocationModule from '../assests/reuse/LocationComponent';
-import {openSettings} from 'react-native-send-intent';
+import {openSettings,SendIntentAndroid} from 'react-native-send-intent';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 
+
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dzixwmfmz/upload';
+var googleData={};
 
 const SignupSchema = Yup.object().shape({
   first_name: Yup.string()
     .min(2, '*Too Short!')
     .max(50, '*Too Long!')
     .required('*firstname Required'),
-  last_name: Yup.string()
-    .min(2, '*Too Short!')
-    .max(50, '*Too Long!')
-    .required('*Lastname Required'),
   email: Yup.string()
     .email('*Invalid email')
     .required('*Email Required'),
@@ -49,16 +47,51 @@ class SignUp extends React.Component {
     }
   }
 
-  componentDidMount(){
+  fetchGoogleUser=async()=>{
+    this.setState({isLoading:true});
+    try
+    {
+     let response=await fetch(baseURL+'/users/login',{
+       method:'GET',
+       headers:{
+         'Authorization':'Bearer '+this.state.jwtToken
+       }
+     })
+     if(response.ok)
+     {
+       let data=await response.json();
+       let result=data.user;
 
-    SecureStore.getItemAsync('jwt_key')
-    .then((data)=>{
-     let token=data;
-    // console.log(token);
+      // console.log(result);
+       googleData.first_name=result.first_name;
+       googleData.last_name=result.last_name;
+       googleData.email=result.email;
+     //  console.log(googleData);
+      
+
+     }
+
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
+    this.setState({isLoading:false});
+  }
+
+ async componentDidMount(){
+  //console.log('sisgn up');
+    try
+    {
+      let token = await  SecureStore.getItemAsync('jwt_key');
       this.setState({jwtToken:token});
-    })
-    .catch((err)=>console.warn(err));
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
 
+  await this.fetchGoogleUser();
     // this.setState({
     //   userInfo:JSON.parse(this.props.navigation.getParam('user',''))
     // });
@@ -320,7 +353,7 @@ else
             </View>
             <View style={{width:'100%',alignItems:'center',justifyContent:'center',marginBottom:'2%'}}>
                     <Formik 
-                      initialValues={{ first_name: '', last_name: '', occupation:'', email:'', mobile:'' }}
+                      initialValues={{ first_name: `${googleData.first_name}`, last_name:`${googleData.last_name}`, occupation:'', email:`${googleData.email}`, mobile:'' }}
                       onSubmit={(values)=> { this.formSubmit(values)}}
                       validationSchema={SignupSchema}
                       >
@@ -345,9 +378,7 @@ else
                             placeholderTextColor='black'
                             onChangeText={handleChange('last_name')}
                             />
-                              {errors.last_name && touched.last_name ? (
-                                <Text style={{fontSize:10, color:'red'}}>{errors.last_name}</Text>
-                              ) : null}
+                
                             <TextInput
                             style={styles.input}
                             placeholder='Occupation'
@@ -364,6 +395,7 @@ else
                             onChangeText={handleChange('email')}
                             onBlur={handleBlur('email')}
                             value={values.email}
+                            editable={false}
                             />
                             {errors.email && touched.email ? <Text style={{fontSize:10, color:'red'}}>{errors.email}</Text> : null}
                             <TextInput
