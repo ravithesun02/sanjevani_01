@@ -17,7 +17,7 @@ import Pdf from 'react-native-pdf';
 import pdfSource from '../assests/images/SANJEVANI.pdf';
 
 
-
+const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dzixwmfmz/upload';
 var googleData={};
 const {height,width}=Dimensions.get('window');
@@ -49,7 +49,8 @@ class SignUp extends React.Component {
       isImageUploading:false,
       isLoading:false,
       isChecked:false,
-      termModal:false
+      termModal:false,
+      locationModal:false
 
     }
   }
@@ -170,7 +171,9 @@ if(!pickerResult.cancelled)
 
   }
 
-  findCoordinates =() => {
+  findCoordinates =async() => {
+    this.setState({locationModal:true})
+    await sleep(1500);
     try
     {
     (async () => {
@@ -334,7 +337,7 @@ else
             >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <LocationModule/>
+              {this.state.locationModal &&  <LocationModule/>}
             <Text style={{margin:'5%',fontWeight:'bold'}}>Kindly give us access to your Location</Text>
             <Text style={{margin:'5%',marginBottom:'6%',color:'red'}}>Please be sure you are at your HOME , while enabling Location</Text>
             <Entypo name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates} >Allow</Entypo>
@@ -354,7 +357,7 @@ else
                     console.log(`number of pages: ${numberOfPages}`);
                 }}
                  />
-                <Button onPress={() => this.setState({termModal:false})}><Text style={{alignItems:'center',fontWeight:'500'}}>close</Text></Button>
+                <Button onPress={() => this.setState({termModal:false})} style={{alignItems:'center',justifyContent:'center',backgroundColor:'grey'}} ><Text style={{fontWeight:'500'}}> CLOSE </Text></Button>
           </Modal>
       <View style={styles.container}>
         <View style={{justifyContent:'center',alignItems:'center',width:'100%',height:'19%',marginVertical:'1%'}}>
