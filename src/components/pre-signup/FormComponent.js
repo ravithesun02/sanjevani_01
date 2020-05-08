@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator, ListView, ScrollView,Modal} from 'react-native'
+import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ListView, ScrollView,Modal,} from 'react-native'
 import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
 import * as Yup from 'yup';
-import { Card, ListItem, List,Button ,Toast} from 'native-base';
+import { Card, ListItem, List,Button ,Toast,CheckBox} from 'native-base';
 import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
 import  Entypo from 'react-native-vector-icons/Entypo';
 import * as Location from 'expo-location';
@@ -13,10 +13,14 @@ import {openSettings,SendIntentAndroid} from 'react-native-send-intent';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
+import Pdf from 'react-native-pdf';
+import pdfSource from '../assests/images/SANJEVANI.pdf';
+
 
 
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dzixwmfmz/upload';
 var googleData={};
+const {height,width}=Dimensions.get('window');
 
 const SignupSchema = Yup.object().shape({
   first_name: Yup.string()
@@ -43,7 +47,10 @@ class SignUp extends React.Component {
       userInfo:{},
       isImageSelected:false,
       isImageUploading:false,
-      isLoading:false
+      isLoading:false,
+      isChecked:false,
+      termModal:false
+
     }
   }
 
@@ -143,6 +150,15 @@ if(!pickerResult.cancelled)
 //console.log(data.url);
       this.setState({profile_image:data.url,isImageUploading:false});
     }).catch(err => console.log(err))
+  }
+
+  togglecheck=()=>{
+    this.setState({isChecked: !this.state.isChecked})
+  }
+  termModal=()=>{
+      this.setState({
+        termModal:!this.state.termModal
+      })
   }
 
   proceedToSubmit=()=>{
@@ -277,7 +293,6 @@ error=>{
 }
 
   render() {
-
     if(this.state.isLoading)
       return <Loader/>
 else
@@ -325,6 +340,21 @@ else
             <Entypo name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates} >Allow</Entypo>
             </View>
             </View>
+          </Modal>
+          <Modal
+            animationType='slide'
+            visible={this.state.termModal}
+            >
+                <Pdf source={pdfSource} 
+                  style={styles.pdf}
+                   onError={(error)=>{
+                    console.log(error);
+                  }}
+                  onLoadComplete={(numberOfPages,filePath)=>{
+                    console.log(`number of pages: ${numberOfPages}`);
+                }}
+                 />
+                <Button onPress={() => this.setState({termModal:false})}><Text style={{alignItems:'center',fontWeight:'500'}}>close</Text></Button>
           </Modal>
       <View style={styles.container}>
         <View style={{justifyContent:'center',alignItems:'center',width:'100%',height:'19%',marginVertical:'1%'}}>
@@ -407,9 +437,17 @@ else
                             onBlur={handleBlur('mobile')}
                             value={values.mobile}
                             />
+                            <List>
+                              <ListItem>
+                                <CheckBox style={{borderRadius:10,height:20,width:20}} checked={this.state.isChecked} onPress={()=> this.togglecheck()} />
+                                <Text> I agree to </Text>
+                                <Button transparent onPress={()=>this.termModal()}><Text style={{color:'blue'}}>terms & conditions</Text></Button>                           
+                              </ListItem>
+                            
+                            </List>
                           
                           {
-                            !this.state.isLocationAccessed ? <Button style={{backgroundColor:"#FF8A65",justifyContent:'center',alignItems:'center',width:'50%',borderRadius:20}} onPress={handleSubmit}>
+                            !this.state.isLocationAccessed ? <Button style={{backgroundColor:"#FF8A65",justifyContent:'center',alignItems:'center',width:'50%',borderRadius:20}} disabled={!this.state.isChecked} onPress={handleSubmit}>
                             <Text style={{fontWeight:'bold'}}>PROCEED</Text>
                           </Button> :
                          
@@ -487,6 +525,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
+  },
+  pdf:{
+    width:width,
+    height:'93.5%'
   }
 });
 export default SignUp;
