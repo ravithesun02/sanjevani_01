@@ -28,12 +28,12 @@ const taskRandom = async taskData => {
     const {delay} = taskData;
    
     
-    //  console.log('running')
+   // console.log('running')
 
       // await Location.startGeofencingAsync('GEO_FENCING',regions);
       await Location.startLocationUpdatesAsync('LOCATION_TRACKER',optionsLoc);
      
-    // console.log('Runned -> ' );
+   // console.log('Runned -> ' );
   });
 };
 
@@ -182,66 +182,70 @@ const optionsLoc={
     requestPermissions: true
   });
 }
-   firstLocalNotification = () => {
+   firstLocalNotification = (distance) => {
     PushNotification.localNotification({
       autoCancel: true,
-      bigText:'kha ja rha hai bhai',
-      subText: 'Local Notification Demo',
-      title: 'this is wrong',
-      message: 'this must be important',
+      bigText:distance,
+      subText: 'Sanjevani Alert',
+      title: 'Stay at Home',
+      message:distance ,
       color: "red",
       priority: "high",
 
       vibrate: true,
-      vibration: 1000,
+      vibration: 300,
       playSound: true,
       soundName: 'default',
     })
-  }
+  };
   PushNotification.localNotificationSchedule({
     title: "stay safe",
     message: "My Notification Message", // (required)
     date: new Date(Date.now() + 60 * 12 * 60 * 1000), // in 60 secs
   });
 
-  TaskManager.defineTask('LOCATION_TRACKER', ({ data, error }) => {
+  TaskManager.defineTask('LOCATION_TRACKER',async ({ data, error }) => {
     if (error) {
      console.log(error.message);
       return;
     }
     if (data) {
-     // console.log(data);
+     //console.log(data);
       const { locations } = data;
      // console.log(locations);
       const location=locations[0];
+     // console.log(location);
       let lat=location.coords.latitude;
       let lon=location.coords.longitude;
       let distancecovered=calculateDistance(lat,lon);
-
+     // console.log(distancecovered);
       if(distancecovered>500)
       {
           if(counter==0)
           {
             //push notification here
-            this.firstLocalNotification();
-          //  console.log('Post process');
-            postLocation(location);
-            sleep(5000);
+          
+          // console.log('Post process');
+         // console.log(location);
+          await  postLocation(location);
+            firstLocalNotification(`You have crossed ${Math.floor(distancecovered)} m from your home`);
+            sleep(3000);
             distance=200;
            // console.log('post end');
           }
           else if(counter>0)
           {
-              updateLocation(location);
-              sleep(5000);
+            await  updateLocation(location);
+              sleep(3000);
           }
       }
       else
       {
         if(counter!=0)
         {
-          deleteLocation();
-          sleep(5000);
+         await deleteLocation();
+         firstLocalNotification('You are SAFE now ! Stay at Home');
+          sleep(3000);
           counter=0;
           distance=500;
         }
