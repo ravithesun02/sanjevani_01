@@ -6461,7 +6461,7 @@ react-native-gesture-handler@^1.6.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-iphone-x-helper@^1.0.3:
+react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
@@ -6615,6 +6615,19 @@ react-navigation-animated-switch@^0.5.11:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.5.11.tgz#5ffd94e93d263378b8a3c496fca126915175d31d"
   integrity sha512-iRYr1w1SrS3ze4u+zLjMk77IQ1d3/HoMtYsLN5P4I8ckBHDOm7OO9jWCKXyNH9YRBCfG7J/KUVWWPZAlowloBQ==
+
+react-navigation-drawer@^2.4.13:
+  version "2.4.13"
+  resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.4.13.tgz#9a5240664c1022a58a598fb326124185a6f8f0f0"
+  integrity sha512-C9YI8iks0EoTpfDtE7Ys/QJy42jFfTJZqHNULzIu9doqbc5z6cc4Uutz9nUvAae3hJguUrv61FssC+caR6XuFg==
+
+react-navigation-stack@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-2.4.0.tgz#34efbbaf64f6fe2a77b74bf85a1f784cc8033b40"
+  integrity sha512-Ilo5aAXyh0uTs19HskOuD3NSxdhcUD3ZVjKalYw3egifzzGqs36NL1L7lrB+4ZZpiUwpMDJrYvUQROI64cvY5A==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
 
 react-navigation@^4.3.8:
   version "4.3.8"
