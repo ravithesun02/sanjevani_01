@@ -153,12 +153,12 @@ error=>{
               <View style={styles.logobg}>
                 <Animated.Image 
                 onLoad={this.onLoad()}
-                source={require('../assests/images/app_icon.png')}
+                source={require('../assests/images/signinLogo.png')}
                 style={[styles.logo,animatedStyle]}
                 />
                 <Animated.View style={[styles.textbg,animatedStyle]}>
-                <Text style={{textAlign:'center',color:'white',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>सुरक्षित हो जीवनी,</Text>
-                <Text style={{textAlign:'center',color:'white',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>जब साथ हो संजीवनी ।</Text>
+                <Text style={{textAlign:'center',color:'#4E4E4E',fontWeight:'bold',fontSize:16,paddingTop:10,paddingBottom:3}}>सुरक्षित हो जीवनी,</Text>
+                <Text style={{textAlign:'center',color:'#4E4E4E',fontWeight:'bold',fontSize:16,paddingTop:2,paddingBottom:3}}>जब साथ हो संजीवनी ।</Text>
               </Animated.View>
               </View>
               <View style={styles.btnbg}>
@@ -194,8 +194,8 @@ const styles=StyleSheet.create({
     elevation:5
   },
   logo:{
-    width:200,
-    height:200
+    width:284,
+    height:188
     
   },
   textbg:{
@@ -207,7 +207,7 @@ const styles=StyleSheet.create({
     justifyContent:'center',
     height:height*0.2,
     width:width,
-    alignItems:'center'
+    alignItems:'center',
   }
 })
 

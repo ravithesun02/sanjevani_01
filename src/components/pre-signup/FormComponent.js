@@ -13,8 +13,7 @@ import {openSettings,SendIntentAndroid} from 'react-native-send-intent';
 import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
-import Pdf from 'react-native-pdf';
-import pdfSource from '../assests/images/SANJEVANI.pdf';
+import PDF from '../pre-signup/T&C'
 
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
@@ -347,16 +346,8 @@ else
           <Modal
             animationType='slide'
             visible={this.state.termModal}
-            >
-                <Pdf source={pdfSource} 
-                  style={styles.pdf}
-                   onError={(error)=>{
-                    console.log(error);
-                  }}
-                  onLoadComplete={(numberOfPages,filePath)=>{
-                    console.log(`number of pages: ${numberOfPages}`);
-                }}
-                 />
+            > 
+              <PDF/>
                 <Button onPress={() => this.setState({termModal:false})} style={{alignItems:'center',justifyContent:'center',backgroundColor:'grey'}} ><Text style={{fontWeight:'500'}}> CLOSE </Text></Button>
           </Modal>
       <View style={styles.container}>
