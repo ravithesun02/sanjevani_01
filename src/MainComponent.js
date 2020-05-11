@@ -12,6 +12,7 @@ import { Dimensions, AsyncStorage, Image, Text } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import Overall from './components/post-signup/OverallDataScreen';
 
 const {height,width}=Dimensions.get('window');
 var profile='';
@@ -77,6 +78,9 @@ const CustomDrawer=(props)=>(
 const DrawerNavigator=createDrawerNavigator({
   Home:{
     screen:Dashboard
+  },
+  OverallData:{
+    screen:Overall
   }
 },{
   initialRouteName:'Home',
@@ -86,7 +90,7 @@ const DrawerNavigator=createDrawerNavigator({
     activeTintColor: '#000000',
     activeBackgroundColor: '#e6e6e6',
   },
-  drawerBackgroundColor:'#ef8354'
+  drawerBackgroundColor:'grey'
 });
 
 

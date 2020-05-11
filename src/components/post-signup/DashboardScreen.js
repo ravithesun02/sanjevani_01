@@ -55,7 +55,7 @@ class Dashboard extends Component{
         if(res.ok)
         {
             let data=await res.json();
-            //console.log(res);
+           // console.log(data);
             Data.lastFetch=data.data.lastRefreshed;
           
                 Data.cn_confirmedcases=data.data.total.confirmed;
@@ -78,6 +78,8 @@ class Dashboard extends Component{
                 }
             }
          //  console.log(Data);
+
+      
           
         }
         else
@@ -190,7 +192,7 @@ class Dashboard extends Component{
               let userinfo=data.user;
             try{
                 await AsyncStorage.setItem('userinfo',JSON.stringify(userinfo));
-                console.log('stored');
+               // console.log('stored');
                 this.setState({isStorage:true,userState:userinfo.address.state});
                
             }
