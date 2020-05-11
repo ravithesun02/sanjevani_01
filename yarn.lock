@@ -6586,6 +6586,11 @@ react-navigation-animated-switch@^0.5.11:
   resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.5.11.tgz#5ffd94e93d263378b8a3c496fca126915175d31d"
   integrity sha512-iRYr1w1SrS3ze4u+zLjMk77IQ1d3/HoMtYsLN5P4I8ckBHDOm7OO9jWCKXyNH9YRBCfG7J/KUVWWPZAlowloBQ==
 
+react-navigation-drawer@^2.4.13:
+  version "2.4.13"
+  resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.4.13.tgz#9a5240664c1022a58a598fb326124185a6f8f0f0"
+  integrity sha512-C9YI8iks0EoTpfDtE7Ys/QJy42jFfTJZqHNULzIu9doqbc5z6cc4Uutz9nUvAae3hJguUrv61FssC+caR6XuFg==
+
 react-navigation@^4.3.8:
   version "4.3.8"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-4.3.8.tgz#7eacd186fbaa849355341046d9c5c95dec97d3bf"

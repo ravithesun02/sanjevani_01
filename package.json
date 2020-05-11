@@ -38,6 +38,7 @@
     "react-native-webview": "^9.4.0",
     "react-navigation": "^4.3.8",
     "react-navigation-animated-switch": "^0.5.11",
+    "react-navigation-drawer": "^2.4.13",
     "yup": "^0.28.4"
   },
   "devDependencies": {
