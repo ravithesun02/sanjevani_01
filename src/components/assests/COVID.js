@@ -1,5 +1,5 @@
-var DATA = {
-	"FAQ":[
+
+	export const FAQ=[
 		{
 			"id":0,
 			"question":"What is corona virus",
@@ -79,12 +79,11 @@ var DATA = {
 			"question":"Is there anything I should not do?",
 			"answer":"The following measures ARE NOT effective against COVID-2019 and can be harmful: • Smoking • Wearing multiple masks • Taking antibiotics (See question 12 'Are there any medicines of therapies that can prevent or cure COVID-19?') "
 		}
-	],
-	"sawal":[
+	];
+export const Sawal=[
 		{
 			"question":"क्या है कोरोना वायरस?",
 			"answer":"कोरोना वायरस का संबंध वायरस के ऐसे परिवार से है, जिसके संक्रमण से जुकाम से लेकर सांस लेने में तकलीफ जैसी समस्या हो सकती है। इस वायरस को पहले कभी नहीं देखा गया है। इस वायरस का संक्रमण दिसंबर में चीन के वुहान शहर में शुरू हुआ था। कोरोना वायरस, विषाणुओं के एक बहुत बड़े परिवार कता हिस्सा है लेकिन इनमें से सिर्फ 6 विषाणु ही ऐसे हैं जो इंसानों को संक्रमित कर सकते हैं। नोवेल कोरोना वायरस यानी ये नया वायरस पहली बार सामने आया है जो इंसान को संक्रमित कर रहा है। WHO ने इस नए कोरोना वायरस को 2019-nCoV नाम दिया है।"
 		}
-	]
-}
-export default DATA;
+	];
+

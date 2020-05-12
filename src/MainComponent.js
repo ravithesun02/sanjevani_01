@@ -8,7 +8,6 @@ import GoogleSignin from './components/pre-signup/SigninGoogleComponent';
 import Dashboard from './components/post-signup/DashboardScreen';
 import {Transition} from 'react-native-reanimated';
 import LearnCOVID from './components/post-signup/LearnCOVID.js';
-import TestCovid from './components/post-signup/testCOVID';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 import { Dimensions, AsyncStorage, Image, Text } from 'react-native';
@@ -111,6 +110,9 @@ const DrawerNavigator=createDrawerNavigator({
   },
   'Govt. Notification':{
     screen:GovtNotify
+  },
+  'Learn COVID 19':{
+    screen:LearnCOVID
   }
 },{
   initialRouteName:'Home',
@@ -126,12 +128,11 @@ const DrawerNavigator=createDrawerNavigator({
 
 
 const AppSwitchContainer=createAnimatedSwitchNavigator({
-  //  Splash:SplashScreen,
-  //  Swipe:SwipeImage,
-  //  SignIn:GoogleSignin,
-  //  Sign:Signup,
-  //  Dash:DrawerNavigator
-    Learn : LearnCOVID
+   Splash:SplashScreen,
+   Swipe:SwipeImage,
+   SignIn:GoogleSignin,
+   Sign:Signup,
+   Dash:DrawerNavigator
 }, {
     // The previous screen will slide to the bottom while the next screen will fade in
     transition: (
