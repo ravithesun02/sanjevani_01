@@ -15,6 +15,11 @@ var counter=0;
 var distance=500;
 var home_lat=0;
 var home_lon=0;
+var optionsLoc={
+  "accuracy":Location.Accuracy.Balanced,
+  "timeInterval":10000,
+  "distanceInterval":distance
+}
 
 const taskRandom = async taskData => {
   if (Platform.OS === 'ios') {
@@ -26,22 +31,38 @@ const taskRandom = async taskData => {
   await new Promise(async resolve => {
     // For loop with a delay
     const {delay} = taskData;
-   
+   var taskcheck;
+
+ 
     
    // console.log('running')
+      while(BackgroundJob.isRunning())
+      {
+        try
+        {
+         taskcheck =await TaskManager.isTaskRegisteredAsync('LOCATION_TRACKER');
+
+        }
+        catch(error)
+        {
+          console.log(error);
+        }
+
+        if(!taskcheck)
+        {
+          await Location.startLocationUpdatesAsync('LOCATION_TRACKER',optionsLoc);
+        }
+        
+        
+      }
 
       // await Location.startGeofencingAsync('GEO_FENCING',regions);
-      await Location.startLocationUpdatesAsync('LOCATION_TRACKER',optionsLoc);
      
-   // console.log('Runned -> ' );
+   console.log('Runned -> ' );
   });
 };
 
-const optionsLoc={
-    "accuracy":Location.Accuracy.Balanced,
-    "timeInterval":10000,
-    "distanceInterval":distance
-  }
+
 /**
      * Toggles the background task
      * 
@@ -211,9 +232,9 @@ const optionsLoc={
     }
     if (data) {
      //console.log(data);
-      const { locations } = data;
+      var { locations } = data;
      // console.log(locations);
-      const location=locations[0];
+      var location=locations[0];
      // console.log(location);
       let lat=location.coords.latitude;
       let lon=location.coords.longitude;
@@ -300,6 +321,7 @@ const optionsLoc={
       
         try {
         //  console.log('Trying to start background service');
+        if(!BackgroundJob.isRunning())
           await BackgroundJob.start(taskRandom, options);
         //  console.log('Successful start!');
         } catch (e) {

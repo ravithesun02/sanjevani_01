@@ -11,21 +11,12 @@ var Data2 = data.sawal;
 class LearnCOVID extends React.Component{
     state={
         hindi:true,
-        opacity:new Animated.Value(0)
     }
     toggleHindi(){
         this.setState({hindi:!this.state.hindi})
     }
-    onLoad = () => {
-        this.state.opacity.setValue(0)
-       Animated.timing(this.state.opacity, {
-         toValue: 1,
-         duration: 1000,
-         useNativeDriver: true,
-       }).start();
-     }
 
-     _renderHeader =(item, expanded) =>{
+     _renderHeader(item, expanded) {
         return (
           <View style={{
             flexDirection: "row",
@@ -66,8 +57,8 @@ class LearnCOVID extends React.Component{
                 <SafeAreaView>
                  <Accordion
                  dataArray={Data1}
-                 animation={true}
                  expanded={true}
+                 animation={true}
                  renderHeader={this._renderHeader}
                  renderContent={this._renderContent}
                 />

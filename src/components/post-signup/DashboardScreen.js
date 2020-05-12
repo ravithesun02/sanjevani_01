@@ -12,6 +12,7 @@ import Loader from '../assests/reuse/loadingScreen';
 import WebView from 'react-native-webview';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import {LottieView} from 'lottie-react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const {height,width}=Dimensions.get('window');
@@ -19,6 +20,11 @@ const {height,width}=Dimensions.get('window');
 var Data={};
 
 class Dashboard extends Component{
+
+
+    static navigationOptions={
+        drawerLabel:'Home'
+    }
 
     constructor(props)
     {
@@ -49,7 +55,7 @@ class Dashboard extends Component{
         if(res.ok)
         {
             let data=await res.json();
-            //console.log(res);
+           // console.log(data);
             Data.lastFetch=data.data.lastRefreshed;
           
                 Data.cn_confirmedcases=data.data.total.confirmed;
@@ -72,6 +78,8 @@ class Dashboard extends Component{
                 }
             }
          //  console.log(Data);
+
+      
           
         }
         else
@@ -184,7 +192,7 @@ class Dashboard extends Component{
               let userinfo=data.user;
             try{
                 await AsyncStorage.setItem('userinfo',JSON.stringify(userinfo));
-                console.log('stored');
+               // console.log('stored');
                 this.setState({isStorage:true,userState:userinfo.address.state});
                
             }
@@ -322,6 +330,9 @@ else
                 {this.state.isLocationEnabled && <BackModule/> }
                 <View style={styles.container}>
                     <View style={styles.titleImage}>
+                        <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
+                           <Ionicons color='#ef8354' name="md-menu" size={32}/>
+                        </Button>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
                     </View>
                     <ScrollView>
