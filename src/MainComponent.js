@@ -8,11 +8,13 @@ import GoogleSignin from './components/pre-signup/SigninGoogleComponent';
 import Dashboard from './components/post-signup/DashboardScreen';
 import {Transition} from 'react-native-reanimated';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
+import {createStackNavigator} from 'react-navigation-stack';
 import { Dimensions, AsyncStorage, Image, Text } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Overall from './components/post-signup/OverallDataScreen';
+import District from './components/post-signup/DistrictDataScreen';
 
 const {height,width}=Dimensions.get('window');
 var profile='';
@@ -56,6 +58,16 @@ class Main extends Component{
     }
 }
 
+const DataStack=createStackNavigator({
+  Overall:Overall,
+  DistrictData:District
+},{
+  initialRouteName:'Overall',
+  defaultNavigationOptions:{
+    headerShown:false
+  }
+});
+
 const CustomDrawer=(props)=>(
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
@@ -80,7 +92,7 @@ const DrawerNavigator=createDrawerNavigator({
     screen:Dashboard
   },
   OverallData:{
-    screen:Overall
+    screen:DataStack
   }
 },{
   initialRouteName:'Home',

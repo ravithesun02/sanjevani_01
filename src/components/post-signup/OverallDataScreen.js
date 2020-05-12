@@ -20,6 +20,8 @@ class Overall extends Component{
             isLoading:false,
             opacity:new Animated.Value(0)
         }
+
+    
     }
 
     onLoad = () => {
@@ -69,7 +71,7 @@ class Overall extends Component{
             alignItems: "center" ,
             margin:5
              }}>
-          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16 }}>
+          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16 ,color:'#4e4e4e'}}>
               {" "}{item.state}
             </Text>
             {expanded
@@ -79,7 +81,7 @@ class Overall extends Component{
         );
       }
 
-      _renderContent(item) {
+      _renderContent=(item)=> {
 
         
         return (
@@ -101,7 +103,7 @@ class Overall extends Component{
                <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {item.deaths} </Text>
             </View>
             <View style={{justifyContent:'center',marginRight:'4%',alignItems:'flex-end'}}>
-                <Button transparent>
+                <Button transparent onPress={()=>this.props.navigation.navigate('DistrictData',{state:item.state})} >
                     <Text style={{color:'blue',fontWeight:'bold',textDecorationLine:'underline'}}>District wise data >> </Text>
 
                 </Button>
@@ -148,7 +150,7 @@ class Overall extends Component{
                         <Text style={{fontWeight:'bold',fontSize:18,marginVertical:'4%'}}>State Wise Data</Text>
                 </View>
 
-                <Content>
+                
                 <SafeAreaProvider>
                 <SafeAreaView>
                  <Accordion
@@ -166,7 +168,7 @@ class Overall extends Component{
 
 
                     
-                </Content>
+               
            
             </ImageBackground>
         )
