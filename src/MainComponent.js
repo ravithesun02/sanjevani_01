@@ -10,7 +10,7 @@ import {Transition} from 'react-native-reanimated';
 import LearnCOVID from './components/post-signup/LearnCOVID.js';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
-import { Dimensions, AsyncStorage, Image, Text } from 'react-native';
+import { Dimensions, AsyncStorage, Image, Text ,ImageBackground} from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import {View} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -75,18 +75,20 @@ const DataStack=createStackNavigator({
 });
 
 const CustomDrawer=(props)=>(
+  <ImageBackground source={require('./components/assests/images/drawer.png')} style={{width:'100%',height:'100%'}}>
+              
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
-    <View style={{alignItems:'center',flexDirection:'row',padding:10,backgroundColor:'#468DA8',borderBottomColor:'black',borderBottomWidth:1}}>
+    <View style={{alignItems:'center',flexDirection:'row',padding:10,borderBottomColor:'black',borderBottomWidth:1}}>
       <View style={{height:105,width:105,justifyContent:'center',alignItems:'center',borderRadius:50,elevation:10}}>
 
       
       <Image source={{uri:profile}} style={{height:100,width:100,borderRadius:50,borderColor:'#e4e4e4',borderWidth:1}} />
       </View>
       <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3',marginLeft:2}}>Hi , {name} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3'}}> {email} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3'}}> {mobile} </Text>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
 
       </View>
     </View>
@@ -99,6 +101,7 @@ const CustomDrawer=(props)=>(
 
   </SafeAreaView>
   </SafeAreaProvider>
+  </ImageBackground>
 )
 
 const DrawerNavigator=createDrawerNavigator({
@@ -119,10 +122,10 @@ const DrawerNavigator=createDrawerNavigator({
   drawerWidth:width*8/10,
   contentComponent:CustomDrawer,
   contentOptions: {
-    activeTintColor: 'white',
-    activeBackgroundColor: 'grey'
+    activeTintColor: '#4E4E4E',
+    activeBackgroundColor: '#E0CEB4',
+    inactiveTintColor:'#4E4E4E'
   },
-  drawerBackgroundColor:'#468DA8',
   drawerLockMode:'unlocked'
 });
 

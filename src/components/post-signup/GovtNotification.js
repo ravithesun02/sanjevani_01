@@ -62,7 +62,7 @@ class GovtNotify extends Component{
                 </Left>
                 <Right>
                     <Button onPress={()=>Linking.openURL(item.link)} rounded style={{padding:10,backgroundColor:'orange',elevation:5}}>
-                        <Text style={{margin:2,fontWeight:'bold'}}>View</Text>
+                        <Text style={{margin:2,fontWeight:'bold',color:'#4e4e4e'}}>View</Text>
                     </Button>
                 </Right>
             </ListItem>
