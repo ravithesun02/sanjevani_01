@@ -15,6 +15,7 @@ import {View} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Overall from './components/post-signup/OverallDataScreen';
 import District from './components/post-signup/DistrictDataScreen';
+import GovtNotify from './components/post-signup/GovtNotification';
 
 const {height,width}=Dimensions.get('window');
 var profile='';
@@ -105,6 +106,9 @@ const DrawerNavigator=createDrawerNavigator({
   },
   'Overall Data':{
     screen:DataStack
+  },
+  'Govt. Notification':{
+    screen:GovtNotify
   }
 },{
   initialRouteName:'Home',
@@ -114,7 +118,8 @@ const DrawerNavigator=createDrawerNavigator({
     activeTintColor: 'white',
     activeBackgroundColor: 'grey'
   },
-  drawerBackgroundColor:'#468DA8'
+  drawerBackgroundColor:'#468DA8',
+  drawerLockMode:'unlocked'
 });
 
 
