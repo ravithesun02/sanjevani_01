@@ -14,38 +14,29 @@ class LearnCOVID extends React.Component{
        super(props);
        this.state={
            hindi:false,
-           Data1:FAQ
+           Data1:FAQ,
+           Data2:Sawal
        }
    }
     toggleHindi(){
-        this.setState({hindi:!this.state.hindi});
-        if(this.state.hindi)
-        {
-            this.setState({Data1:Sawal});
-        }
-        else
-        {
-            this.setState({Data1:FAQ});
-        }
-        
+        this.setState({hindi:!this.state.hindi});        
     }
 
      _renderHeader=(item, expanded)=> {
-         console.log(item.question);
         return (
           <View style={{
             flexDirection: "row",
             padding: 10,
             justifyContent: "space-between",
             alignItems: "center" ,
-            margin:5
+            margin:5,
              }}>
-          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16,color:'black' }}>
+          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16,color:'#4E4E4E',width:'90%',borderBottomColor:'#4E4E4E',borderBottomWidth:0.5 }}>
               {item.question}
             </Text>
             {expanded
-              ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-              : <Icon style={{ fontSize: 18 }} name="add-circle" />}
+              ? <FontAwesome5 style={{ fontSize:18,alignSelf:'flex-end'}} name="chevron-up"/>
+              : <FontAwesome5 style={{ fontSize:18,alignSelf:'flex-end'}} name="chevron-down"/>}
           </View>
         );
       }
@@ -53,8 +44,8 @@ class LearnCOVID extends React.Component{
       _renderContent=(item)=> {
          return (
             <View style={{flex:1}} >
-            <View style={{justifyContent:'center',alignItems:'center',width:'90%'}}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,textAlign:'center'}}>{item.answer}</Text>
+            <View style={{width:'100%'}}>
+               <Text style={{fontFamily:'MSRegular',fontSize:16,textAlign:'center', alignSelf:'flex-start'}}>{item.answer}</Text>
             </View>
         </View>
         );
@@ -68,16 +59,31 @@ class LearnCOVID extends React.Component{
             <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
                        <Ionicons color='#ef8354' name="md-menu" size={32}/>
                     </Button>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
-                     <Text style={{fontWeight:'bold',fontSize:18,marginVertical:'4%'}}>State Wise Data</Text>
+            <View style={{justifyContent:'center',alignItems:'center',paddingTop:'10%'}}>
+                    <Text style={{fontWeight:'bold',fontSize:28,color:'red'}}>CORONA VIRUS?</Text>
             </View>
-            <View>
-            {this.state.hindi ? <View><FontAwesome5.Button name="toggle-on" onPress={()=>this.toggleHindi()}><Text>हिन्दी</Text></FontAwesome5.Button></View> : <View><FontAwesome5.Button name="toggle-off" onPress={()=>this.toggleHindi()} ><Text>हिन्दी</Text></FontAwesome5.Button></View>}
+                <View style={{ width:'20%',alignSelf:'flex-end', backgroundColor:'red',borderRadius:20}}>
+                    {this.state.hindi ? 
+                    <FontAwesome5.Button name="toggle-on" onPress={()=>this.toggleHindi()}>हिन्दी</FontAwesome5.Button> 
+                    :
+                    <FontAwesome5.Button name="toggle-off" onPress={()=>this.toggleHindi()} >हिन्दी</FontAwesome5.Button>}
+                </View>
 
-            </View>
+            {this.state.hindi ? 
+            <SafeAreaProvider>
+            <SafeAreaView>
+             <Accordion
+             dataArray={this.state.Data2}
+             animation={true}
+             expanded={true}
+             renderHeader={this._renderHeader}
+             renderContent={this._renderContent}
+            />
 
+            </SafeAreaView>
+            </SafeAreaProvider>
             
+            :
             <SafeAreaProvider>
             <SafeAreaView>
              <Accordion
@@ -90,6 +96,7 @@ class LearnCOVID extends React.Component{
 
             </SafeAreaView>
             </SafeAreaProvider>
+            }
 
 
 
