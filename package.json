@@ -38,12 +38,6 @@
     "react-native-webview": "^9.4.0",
     "react-navigation": "^4.3.8",
     "react-navigation-animated-switch": "^0.5.11",
-<<<<<<< HEAD
-    "react-navigation-drawer": "^2.4.13",
-    "react-navigation-stack": "^2.4.0",
-    "rn-fetch-blob": "^0.12.0",
-=======
->>>>>>> 0868928f0679ed2543a124c5ceb0d8fad3d4a4c4
     "yup": "^0.28.4"
   },
   "devDependencies": {

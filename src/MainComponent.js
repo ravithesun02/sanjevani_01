@@ -7,6 +7,8 @@ import {createAppContainer} from 'react-navigation';
 import GoogleSignin from './components/pre-signup/SigninGoogleComponent';
 import Dashboard from './components/post-signup/DashboardScreen';
 import {Transition} from 'react-native-reanimated';
+import LearnCOVID from './components/post-signup/LearnCOVID.js';
+import TestCovid from './components/post-signup/testCOVID';
 
 
 class Main extends Component{
@@ -25,11 +27,7 @@ class Main extends Component{
 
 
 const AppSwitchContainer=createAnimatedSwitchNavigator({
-    Splash:SplashScreen,
-    Swipe:SwipeImage,
-    SignIn:GoogleSignin,
-    Sign:Signup,
-    Dash:Dashboard
+    Learn : LearnCOVID
     
 }, {
     // The previous screen will slide to the bottom while the next screen will fade in
