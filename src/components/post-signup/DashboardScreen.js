@@ -1,6 +1,6 @@
 import React ,{Component} from 'react';
-import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,Easing,AppState ,AsyncStorage,ActivityIndicator} from 'react-native';
-import {Button} from 'native-base';
+import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,Clipboard,Easing,AppState ,AsyncStorage,ActivityIndicator, Linking} from 'react-native';
+import {Button, Container, Fab,Icon} from 'native-base';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
@@ -11,8 +11,9 @@ import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 import WebView from 'react-native-webview';
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import {LottieView} from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const {height,width}=Dimensions.get('window');
@@ -39,7 +40,10 @@ class Dashboard extends Component{
             webViewLoading:true,
             currentTab:0,
             opacity:new Animated.Value(0),
-            appState:AppState.currentState
+            appState:AppState.currentState,
+            active:false,
+            shareMessage:'This is from sanjevani',
+            FacebookShareURL:'https://sanjevani.com/'
 
         }
     }
@@ -92,6 +96,47 @@ class Dashboard extends Component{
             console.log(err);
         }
     }
+
+    postOnFacebook=() => {
+        let FacebookShareURL = this.state.FacebookShareURL;
+        let FacebookShareMessage = this.state.FacebookShareMessage;
+        let facebookParameters='';
+        if(this.state.FacebookShareURL != undefined)
+        {
+            if(facebookParameters.includes("?") == false)
+            {
+                facebookParameters = facebookParameters+"?u="+encodeURI(this.state.FacebookShareURL);
+            }else{
+                facebookParameters = facebookParameters+"&u="+encodeURI(this.state.FacebookShareURL);
+            }
+        }
+        if(this.state.FacebookShareMessage != undefined)
+        {
+            if(facebookParameters.includes("?") == false)
+            {
+                facebookParameters = facebookParameters+"?quote="+encodeURI(this.state.FacebookShareMessage);
+            }else{
+                facebookParameters = facebookParameters+"&quote="+encodeURI(this.state.FacebookShareMessage);
+            }
+        }
+        let url = 'https://www.facebook.com/sharer/sharer.php'+facebookParameters;
+        Linking.openURL(url).then((data) => {
+          alert('Facebook Opened');
+        }).catch(() => {
+          alert('Something went wrong');
+        });
+      }
+
+      writeToClipboard = async () => {
+        //To copy the text to clipboard
+        this.setState({
+            active:false
+        });
+        await Clipboard.setString(this.state.shareMessage);
+        //alert('Copied to Clipboard!');
+
+        console.log('copied');
+      };
     
     componentDidUpdate()
     {
@@ -367,32 +412,69 @@ else
                         
 
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'grey',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,fontWeight:'bold'}}>LATEST NEWS</Text>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
+                        <Text style={{fontSize:20,fontWeight:'bold',color:'#B8876B'}}> THINGS TO DO</Text>
 
                     </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
 
-                    <View style={{flex:1}}>
-                            <AutoHeightWebView customScript={INJECTED_JS} source={{uri:'https://corona-go.info'}}   javaScriptEnabled={true}
-                                domStorageEnabled={true}
-                                startInLoadingState={true}
-                               
-                                ref={c => {
-                                    this.WebView = c;
-                                  }}
-                            scalesPageToFit={true} onLoadEnd={()=>this.setState({webViewLoading:false})} />
-                                {this.state.webViewLoading &&   <ActivityIndicator
-                                color="#009688"
-                                size="large"
-                                style={styles.ActivityIndicatorStyle}
-                            />}
-                            
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')} autoPlay loop/> 
                         </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')} autoPlay loop/> 
+                        </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')} autoPlay loop/> 
+                        </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')} autoPlay loop/> 
+                        </View>
+                        
+                    </View>
+
+
+                   
 
                     </ScrollView>
 
 
                 </View>
+                <Fab
+                active={this.state.active}
+                direction="up"
+                containerStyle={{ }}
+                style={{ backgroundColor: '#4e4e4e' }}
+                position="bottomRight"
+                onPress={() => this.setState({ active: !this.state.active })}>
+
+                <Icon name="share" />
+                <Button onPress={()=>{this.setState({active:!this.state.active});Linking.openURL('whatsapp://send?text='+this.state.shareMessage)}} style={{ backgroundColor: '#34A34F' }}>
+                <Icon name="logo-whatsapp" />
+                </Button>
+                <Button onPress={()=>{this.setState({active:false});this.postOnFacebook();}} style={{ backgroundColor: '#3B5998' }}>
+                <Icon name="logo-facebook" />
+                </Button>
+                <Button opPress={()=>this.writeToClipboard()} style={{ backgroundColor: '#DD5144' }}>
+                <FontAwesome5 name='paperclip' size={20} />
+                </Button>
+          </Fab>
 
             </ImageBackground>
         )
@@ -438,6 +520,10 @@ const styles=StyleSheet.create({
           flexDirection:'row',
           justifyContent:'space-between',
           marginTop:'3%'
+      },
+      lottie: {
+        width: 200,
+        height: 200
       }
 
 })
