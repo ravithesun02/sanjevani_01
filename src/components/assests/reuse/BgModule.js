@@ -321,6 +321,7 @@ const taskRandom = async taskData => {
       
         try {
         //  console.log('Trying to start background service');
+        if(!BackgroundJob.isRunning())
           await BackgroundJob.start(taskRandom, options);
         //  console.log('Successful start!');
         } catch (e) {

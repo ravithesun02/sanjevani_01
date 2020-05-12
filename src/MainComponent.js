@@ -19,6 +19,8 @@ import District from './components/post-signup/DistrictDataScreen';
 const {height,width}=Dimensions.get('window');
 var profile='';
 var name='';
+var email='';
+var mobile='';
 class Main extends Component{
 
   constructor(props)
@@ -36,7 +38,9 @@ class Main extends Component{
       {
         profile=JSON.parse(value).profile_pic;
         name=JSON.parse(value).first_name;
+        email=JSON.parse(value).email;
        // console.log(profile);
+       mobile='+91'+JSON.parse(value).mobile;
       }
 
     }
@@ -71,16 +75,24 @@ const DataStack=createStackNavigator({
 const CustomDrawer=(props)=>(
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
-    <View style={{alignItems:'center', justifyContent:'center',padding:10,backgroundColor:'#D3D3D3'}}>
-      <Image source={{uri:profile}} style={{height:100,width:100,borderRadius:50}} />
-      <Text style={{fontFamily:'MSRegular',fontSize:17,fontWeight:'bold',marginVertical:'2%'}}>Hi , {name} </Text>
+    <View style={{alignItems:'center',flexDirection:'row',padding:10,backgroundColor:'#468DA8',borderBottomColor:'black',borderBottomWidth:1}}>
+      <View style={{height:105,width:105,justifyContent:'center',alignItems:'center',borderRadius:50,elevation:10}}>
 
+      
+      <Image source={{uri:profile}} style={{height:100,width:100,borderRadius:50,borderColor:'#e4e4e4',borderWidth:1}} />
+      </View>
+      <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3',marginLeft:2}}>Hi , {name} </Text>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3'}}> {email} </Text>
+      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#f3f3f3'}}> {mobile} </Text>
+
+      </View>
     </View>
-    <ScrollView>
-    <DrawerItems {...props}/>
+    <ScrollView >
+    <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontWeight:'bold',fontFamily:'MSRegular',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
     </ScrollView>
-    <View style={{justifyContent:'flex-end',alignItems:'center',backgroundColor:'#013220'}}>
-      <Text>Version : 0.1 Beta</Text>
+    <View style={{justifyContent:'flex-end',alignItems:'center',backgroundColor:'#9E9E9E',padding:5}}>
+      <Text style={{color:'#F3EDEA'}}>Version : 0.1 Beta</Text>
     </View>
 
   </SafeAreaView>
@@ -88,21 +100,21 @@ const CustomDrawer=(props)=>(
 )
 
 const DrawerNavigator=createDrawerNavigator({
-  Home:{
+  'Home':{
     screen:Dashboard
   },
-  OverallData:{
+  'Overall Data':{
     screen:DataStack
   }
 },{
   initialRouteName:'Home',
-  drawerWidth:width*2/3,
+  drawerWidth:width*8/10,
   contentComponent:CustomDrawer,
   contentOptions: {
-    activeTintColor: '#000000',
-    activeBackgroundColor: '#e6e6e6',
+    activeTintColor: 'white',
+    activeBackgroundColor: 'grey'
   },
-  drawerBackgroundColor:'grey'
+  drawerBackgroundColor:'#468DA8'
 });
 
 
