@@ -306,19 +306,19 @@ class Dashboard extends Component{
              return (
                  <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{Data.cn_confirmedcases}</Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.cn_active} </Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{Data.cn_recovered}</Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.cn_deaths} </Text>
                      </View>
                  </Animated.View>
@@ -329,19 +329,19 @@ class Dashboard extends Component{
              return(
                 <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16,}}> {Data.sn_confirmed} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_active} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_recovered} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_deaths} </Text>
                 </View>
                 </Animated.View>
@@ -448,19 +448,19 @@ else
                     </View>
                     <ScrollView onScroll={this.handleScroll}>
                     <View style={styles.title}>
-                        <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
+                        <Text style={{fontSize:18,fontFamily:'Right',color:'#4E4E4E'}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
                     </View>
 
                     <View style={{flex:1,marginTop:10,padding:5}}>
                     <View style={{flexDirection:'row',alignItems:'stretch'}}>
                         <Button transparent onPress={()=>this.setState({currentTab:0})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===0 ? 2:0,width:'50%',justifyContent:'center'}}>
-                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===0 ? 'black':'grey',fontWeight:this.state.currentTab===0 ? 'bold':'normal',letterSpacing:1}}>
+                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===0 ? 'black':'grey',fontWeight:this.state.currentTab===0 ? 'bold':'normal',letterSpacing:1,fontFamily:'Right'}}>
                                 INDIA
                             </Text>
                         </Button>
                         <Button transparent onPress={()=>this.setState({currentTab:1})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===1 ? 2:0,width:'50%',justifyContent:'center'}}>
-                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===1 ? 'black':'grey',fontWeight:this.state.currentTab===1 ? 'bold':'normal',letterSpacing:1}}>
+                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===1 ? 'black':'grey',fontWeight:this.state.currentTab===1 ? 'bold':'normal',letterSpacing:1,fontFamily:'Right'}}>
                                 {this.state.userState.toUpperCase()}
                             </Text>
                         </Button>
@@ -479,7 +479,7 @@ else
 
                     </View>
                     <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,fontWeight:'bold',color:'#B8876B'}}> THINGS TO DO</Text>
+                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
 
                     </View>
                     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -516,7 +516,7 @@ else
                     </View>
 
                     <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,fontWeight:'bold',color:'#B8876B'}}> Symptoms </Text>
+                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> Symptoms </Text>
                     </View>
                     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
 
@@ -525,12 +525,12 @@ else
                             <Image source={require('../assests/images/Cough.png')} style={{width:'100%',height:'100%'}} />
                             </View>
                             <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
-                                <Text style={{fontFamily:'MSRegular'}}>Initially productive cough or dry cough which increase day by day and have more spectum. Cough gets worse after few days.</Text>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>Initially productive cough or dry cough which increase day by day and have more spectum. Cough gets worse after few days.</Text>
                             </View>
                         </View>
                         <View style={{flex:1 , flexDirection:'row' }}>
                         <View style={{width:width-200,justifyContent:'center',alignItems:'center',marginLeft:5}}>
-                                <Text style={{fontFamily:'MSRegular'}}>From day one the body tempertaure increases slightly. After 6 to 7 days high fever can be seen.</Text>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>From day one the body tempertaure increases slightly. After 6 to 7 days high fever can be seen.</Text>
                             </View>
                             <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
                             <Image source={require('../assests/images/Fever.png')} style={{width:'100%',height:'100%'}} />
@@ -542,7 +542,7 @@ else
                             <Image source={require('../assests/images/Short-of-breath.png')} style={{width:'100%',height:'100%'}} />
                             </View>
                             <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
-                                <Text style={{fontFamily:'MSRegular'}}>It’s the initial state of breathing/ respiratory problems. Difficulty in breathing or shortness of breath is the worse state.</Text>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>It’s the initial state of breathing/ respiratory problems. Difficulty in breathing or shortness of breath is the worse state.</Text>
                             </View>
                         </View>
                        
@@ -583,7 +583,8 @@ else
 
 const styles=StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        marginBottom:'2%'
     },
     title:{
         

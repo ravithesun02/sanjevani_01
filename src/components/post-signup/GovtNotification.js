@@ -58,7 +58,7 @@ class GovtNotify extends Component{
         return(
             <ListItem>
                 <Left>
-                  <Text> {item.title} </Text>
+                  <Text style={{fontFamily:'MSRegular'}}> {item.title} </Text>
                 </Left>
                 <Right>
                     <Button onPress={()=>Linking.openURL(item.link)} rounded style={{padding:10,backgroundColor:'orange',elevation:5}}>
@@ -94,10 +94,10 @@ class GovtNotify extends Component{
                 <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
                            <Ionicons color='#ef8354' name="md-menu" size={32}/>
                         </Button>
-                <View style={{justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
+                <View style={{justifyContent:'center',alignItems:'center',marginTop:'2%'}}>
+                        <Text style={{fontFamily:'Right',fontSize:18,color:'#4E4E4E'}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(lastRefreshed).toDateString()} {new Date(lastRefreshed).toTimeString()}  </Text>
-                        <Text style={{fontWeight:'bold',fontSize:18,marginVertical:'4%'}}>Latest Govt. notifications</Text>
+                        <Text style={{fontFamily:'Right',fontSize:18,marginVertical:'4%'}}>Latest Govt. notifications</Text>
                 </View>
 
                 <Accordion

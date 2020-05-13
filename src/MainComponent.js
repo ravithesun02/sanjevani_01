@@ -76,7 +76,7 @@ const DataStack=createStackNavigator({
 });
 
 loadProfileData= async()=>{
-  await sleep(2000);
+  await sleep(4000);
   console.log('called');
   try
     {
@@ -109,14 +109,14 @@ const CustomDrawer=(props)=>(
       <Image source={{uri:profile}} style={{height:100,width:100,borderRadius:50,borderColor:'#e4e4e4',borderWidth:1}} />
       </View>
       <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
 
       </View>
     </View>
     <ScrollView >
-    <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontWeight:'bold',fontFamily:'MSRegular',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
+    <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontFamily:'Right',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
     </ScrollView>
     <View style={{justifyContent:'flex-end',alignItems:'center',backgroundColor:'#9E9E9E',padding:5}}>
       <Text style={{color:'#F3EDEA'}}>Version : 0.1 Beta</Text>
