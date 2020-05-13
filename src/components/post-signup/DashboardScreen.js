@@ -311,7 +311,7 @@ class Dashboard extends Component{
                      </View>
                      <View style={styles.textData}>
                         <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
-                        <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.cn_active} </Text>
+                        <Text style={{fontFamily:'MSRegular',marginRight:'8%',fontSize:16}}> {Data.cn_active} </Text>
                      </View>
                      <View style={styles.textData}>
                         <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
@@ -468,6 +468,11 @@ else
 
                   {this.renderData()}
 
+                </View>
+                <View style={{flex:1 , justifyContent:'center',marginRight:'3%',alignItems:'flex-end'}}>
+                    <Button transparent rounded style={{padding:10,elevation:5}} onPress={()=>this.props.navigation.navigate('Overall Data')}>
+                        <Text style={{fontFamily:'MSRegular',color:'grey',textDecorationLine:'underline'}}>Overall Stats</Text>
+                    </Button>
                 </View>
                   
                     

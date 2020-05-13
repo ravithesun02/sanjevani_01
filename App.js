@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
 import Main from './src/MainComponent';
 import * as firebase from 'firebase';
 import {Root} from 'native-base';
@@ -15,6 +15,7 @@ class App extends React.Component{
   {
     return(
       <Root>
+        <StatusBar hidden/>
      <Main/>
      </Root>
     )

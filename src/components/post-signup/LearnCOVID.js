@@ -31,12 +31,12 @@ class LearnCOVID extends React.Component{
             alignItems: "center" ,
             margin:5,
              }}>
-          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16,color:'#4E4E4E',width:'90%',borderBottomColor:'#4E4E4E',borderBottomWidth:0.5 }}>
+          <Text style={{ fontFamily:'Right',fontSize:16,color:'#4E4E4E',width:'90%' }}>
               {item.question}
             </Text>
             {expanded
-              ? <FontAwesome5 style={{ fontSize:18,alignSelf:'flex-end'}} name="chevron-up"/>
-              : <FontAwesome5 style={{ fontSize:18,alignSelf:'flex-end'}} name="chevron-down"/>}
+              ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
+              : <Icon style={{ fontSize: 18 }} name="add-circle" />}
           </View>
         );
       }
@@ -44,8 +44,8 @@ class LearnCOVID extends React.Component{
       _renderContent=(item)=> {
          return (
             <View style={{flex:1}} >
-            <View style={{width:'100%'}}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,textAlign:'center', alignSelf:'flex-start'}}>{item.answer}</Text>
+            <View style={{margin:'2%'}}>
+               <Text style={{fontFamily:'MSRegular',fontSize:16,textAlign:'center', alignSelf:'center'}}>{item.answer}</Text>
             </View>
         </View>
         );
@@ -59,14 +59,20 @@ class LearnCOVID extends React.Component{
             <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
                        <Ionicons color='#ef8354' name="md-menu" size={32}/>
                     </Button>
-            <View style={{justifyContent:'center',alignItems:'center',paddingTop:'10%'}}>
-                    <Text style={{fontWeight:'bold',fontSize:28,color:'red'}}>CORONA VIRUS?</Text>
+            <View style={{justifyContent:'center',alignItems:'center',paddingTop:'10%',marginVertical:'2%'}}>
+                    <Text style={{fontFamily:'Right',fontSize:28,color:'red'}}>CORONA VIRUS ?</Text>
             </View>
-                <View style={{ width:'20%',alignSelf:'flex-end', backgroundColor:'red',borderRadius:20}}>
+                <View style={{position:'absolute',top:0,right:0}}>
                     {this.state.hindi ? 
-                    <FontAwesome5.Button name="toggle-on" onPress={()=>this.toggleHindi()}>हिन्दी</FontAwesome5.Button> 
+                    <Button transparent style={{padding:10,flexDirection:'row'}} onPress={()=>this.toggleHindi()}>
+                        <FontAwesome5 name='toggle-on' size={22} />
+                        <Text style={{fontSize:15}} >{" "} हिन्दी</Text>
+                    </Button>
                     :
-                    <FontAwesome5.Button name="toggle-off" onPress={()=>this.toggleHindi()} >English</FontAwesome5.Button>}
+                    <Button transparent style={{padding:10,flexDirection:'row'}} onPress={()=>this.toggleHindi()}>
+                    <FontAwesome5 name='toggle-off' size={22} />
+                    <Text style={{fontSize:15}} > {" "}English</Text>
+                </Button>}
                 </View>
 
             {this.state.hindi ? 

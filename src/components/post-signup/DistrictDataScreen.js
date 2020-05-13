@@ -141,7 +141,7 @@ class District extends Component
             </View>
             <View style={styles.textData}>
                <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
-               <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {item.active} </Text>
+               <Text style={{fontFamily:'MSRegular',marginRight:'8%',fontSize:16}}> {item.active} </Text>
             </View>
             <View style={styles.textData}>
                <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>

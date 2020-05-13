@@ -19,7 +19,8 @@ var optionsLoc={
   "accuracy":Location.Accuracy.Balanced,
   "timeInterval":10000,
   "distanceInterval":distance
-}
+};
+var coveredDistance=0;
 
 const taskRandom = async taskData => {
   if (Platform.OS === 'ios') {
@@ -31,30 +32,12 @@ const taskRandom = async taskData => {
   await new Promise(async resolve => {
     // For loop with a delay
     const {delay} = taskData;
-   var taskcheck;
 
  
     
    // console.log('running')
-      while(BackgroundJob.isRunning())
-      {
-        try
-        {
-         taskcheck =await TaskManager.isTaskRegisteredAsync('LOCATION_TRACKER');
-
-        }
-        catch(error)
-        {
-          console.log(error);
-        }
-
-        if(!taskcheck)
-        {
+      
           await Location.startLocationUpdatesAsync('LOCATION_TRACKER',optionsLoc);
-        }
-        
-        
-      }
 
       // await Location.startGeofencingAsync('GEO_FENCING',regions);
      
@@ -110,6 +93,8 @@ const taskRandom = async taskData => {
       {
         counter++;
         console.log('Posted location');
+        firstLocalNotification(`You have crossed ${Math.floor(coveredDistance/1000)} m from your home`);
+           
       }
     })
     .catch((err)=>console.log(err.message));
@@ -240,7 +225,7 @@ const taskRandom = async taskData => {
       let lon=location.coords.longitude;
       let distancecovered=calculateDistance(lat,lon);
      // console.log(distancecovered);
-      if(distancecovered>500)
+      if(distancecovered>1000)
       {
           if(counter==0)
           {
@@ -248,8 +233,8 @@ const taskRandom = async taskData => {
           
           // console.log('Post process');
          // console.log(location);
+         coveredDistance=distancecovered;
           await  postLocation(location);
-            firstLocalNotification(`You have crossed ${Math.floor(distancecovered)} m from your home`);
             sleep(3000);
             distance=200;
            // console.log('post end');
