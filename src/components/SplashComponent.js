@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import {View,Text, Image, ImageBackground, StyleSheet,AsyncStorage} from 'react-native';
+import {View,Text, Image, ImageBackground, StyleSheet,AsyncStorage, StatusBar} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import firebase from 'firebase';
 import { baseURL } from './assests/reuse/baseUrl';
@@ -21,31 +21,49 @@ class SplashScreen extends Component{
 
   
     fetchGoogleUser=async()=>{
+
         try
         {
-         let response=await fetch(baseURL+'/users/login',{
-           method:'GET',
-           headers:{
-             'Authorization':'Bearer '+this.state.jwtToken
-           }
-         })
-         if(response.ok)
-         {
-           let data=await response.json();
-           if(!data.user.newid)
+            let value=await AsyncStorage.getItem('userinfo');
+            if(value!=null)
+            {
                 this.setState({isLoggedIn:true});
-            else 
-            this.setState({isSignedIn:true,profile_pic:data.user.profile_pic});
-          
-    
-         }
-    
+            }
+            else
+            {
+              try
+                {
+                let response=await fetch(baseURL+'/users/login',{
+                method:'GET',
+                headers:{
+                    'Authorization':'Bearer '+this.state.jwtToken
+                }
+                })
+                if(response.ok)
+                {
+                let data=await response.json();
+                if(!data.user.newid)
+                        this.setState({isLoggedIn:true});
+                    else 
+                    this.setState({isSignedIn:true,profile_pic:data.user.profile_pic});
+                
+            
+                }
+            
+                }
+                catch(error)
+                {
+                console.log(error);
+                }
+            }
         }
         catch(error)
         {
-          console.log(error);
+            console.log(error);
         }
-        this.setState({isLoading:false});
+
+        
+       
       }
 
    async componentDidMount(){
@@ -60,7 +78,7 @@ class SplashScreen extends Component{
              await this.fetchGoogleUser();
           }
      
-
+        
        await this.checkIfLoggedIn();
     }
 
@@ -86,6 +104,7 @@ class SplashScreen extends Component{
 
         else
         {
+            await sleep(2000);
            
             this.props.navigation.navigate('Swipe');
         }
@@ -98,6 +117,7 @@ class SplashScreen extends Component{
     {
         return(
             <View style={{flex:1,flexDirection:'column'}}>
+                <StatusBar hidden/>
                 <ImageBackground source={require('./assests/images/Front-page.png')} style={styles.image}/>
                 
                    

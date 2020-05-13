@@ -337,9 +337,12 @@ else
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
               {this.state.locationModal &&  <LocationModule/>}
-            <Text style={{margin:'5%',fontWeight:'bold'}}>Kindly give us access to your Location</Text>
-            <Text style={{margin:'5%',marginBottom:'6%',color:'red'}}>Please be sure you are at your HOME , while enabling Location</Text>
-            <Entypo name="location-pin" margin={5} borderRadius={10} backgroundColor="#D8B59A" onPress={this.findCoordinates} >Allow</Entypo>
+            <Text style={{margin:'5%',fontFamily:'Right'}}>Kindly give us access to your Location</Text>
+            <Text style={{margin:'5%',marginBottom:'6%',fontFamily:'MSRegular',color:'red'}}>Please be sure you are at your HOME , while enabling Location</Text>
+           <Button style={{padding:15,backgroundColor:'#3570E2',borderRadius:15,flexDirection:'row'}} onPress={this.findCoordinates}>
+             <Entypo name="location-pin" color='white' size={22} />
+             <Text style={{color:'white',fontFamily:'MSRegular'}} >Allow</Text>
+           </Button>
             </View>
             </View>
           </Modal>
@@ -432,7 +435,7 @@ else
                             value={values.mobile}
                             />
                             <List>
-                              <ListItem>
+                              <ListItem noBorder>
                                 <CheckBox style={{borderRadius:10,height:20,width:20}} checked={this.state.isChecked} onPress={()=> this.togglecheck()} />
                                 <Text> I agree to </Text>
                                 <Button transparent onPress={()=>this.termModal()}><Text style={{color:'blue'}}>terms & conditions</Text></Button>                           

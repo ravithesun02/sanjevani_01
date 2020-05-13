@@ -66,7 +66,7 @@ class LearnCOVID extends React.Component{
                     {this.state.hindi ? 
                     <FontAwesome5.Button name="toggle-on" onPress={()=>this.toggleHindi()}>हिन्दी</FontAwesome5.Button> 
                     :
-                    <FontAwesome5.Button name="toggle-off" onPress={()=>this.toggleHindi()} >हिन्दी</FontAwesome5.Button>}
+                    <FontAwesome5.Button name="toggle-off" onPress={()=>this.toggleHindi()} >English</FontAwesome5.Button>}
                 </View>
 
             {this.state.hindi ? 

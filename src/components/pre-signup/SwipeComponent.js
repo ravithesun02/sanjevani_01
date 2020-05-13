@@ -102,8 +102,8 @@ export default class SwipeImage extends Component {
           <Image style={{width:250,height:250}} source={require('../assests/images/Wear-Mask.png')}/>
           </View>
           <View style={styles.slogn}>
-            <Text style={{fontWeight:'bold',fontSize:16,color:'#4E4E4E'}}>सामाजिक दूरी बनाने मे कोई गम नहीं,</Text>
-            <Text style={{fontWeight:'bold',fontSize:16,color:'#4E4E4E'}}>कोरोना जीत जाऐ उसमे इतनी दम नहीं।</Text>
+            <Text style={{fontWeight:'bold',fontSize:16,color:'#4E4E4E'}}>अगर हो बाहर निकलना,</Text>
+            <Text style={{fontWeight:'bold',fontSize:16,color:'#4E4E4E'}}>मास्क जरूरी  है लगाना ।</Text>
           </View>
           <View style={styles.skipbtn} onPress={()=> this.props.navigation.navigate('SignIn')}>
             <Button transparent>

@@ -1,6 +1,6 @@
 import React ,{Component} from 'react';
-import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,Easing,AppState ,AsyncStorage,ActivityIndicator} from 'react-native';
-import {Button} from 'native-base';
+import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,Clipboard,Easing,AppState ,AsyncStorage,ActivityIndicator, Linking} from 'react-native';
+import {Button, Container, Fab,Icon} from 'native-base';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
@@ -11,8 +11,9 @@ import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 import WebView from 'react-native-webview';
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import {LottieView} from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const {height,width}=Dimensions.get('window');
@@ -39,7 +40,14 @@ class Dashboard extends Component{
             webViewLoading:true,
             currentTab:0,
             opacity:new Animated.Value(0),
-            appState:AppState.currentState
+            appState:AppState.currentState,
+            active:false,
+            shareMessage:'This is from sanjevani',
+            FacebookShareURL:'https://sanjevani.com/',
+            speed1:new Animated.Value(0),
+            speed2:new Animated.Value(0),
+            speed3:new Animated.Value(0),
+            speed4:new Animated.Value(0)
 
         }
     }
@@ -92,6 +100,47 @@ class Dashboard extends Component{
             console.log(err);
         }
     }
+
+    postOnFacebook=() => {
+        let FacebookShareURL = this.state.FacebookShareURL;
+        let FacebookShareMessage = this.state.FacebookShareMessage;
+        let facebookParameters='';
+        if(this.state.FacebookShareURL != undefined)
+        {
+            if(facebookParameters.includes("?") == false)
+            {
+                facebookParameters = facebookParameters+"?u="+encodeURI(this.state.FacebookShareURL);
+            }else{
+                facebookParameters = facebookParameters+"&u="+encodeURI(this.state.FacebookShareURL);
+            }
+        }
+        if(this.state.FacebookShareMessage != undefined)
+        {
+            if(facebookParameters.includes("?") == false)
+            {
+                facebookParameters = facebookParameters+"?quote="+encodeURI(this.state.FacebookShareMessage);
+            }else{
+                facebookParameters = facebookParameters+"&quote="+encodeURI(this.state.FacebookShareMessage);
+            }
+        }
+        let url = 'https://www.facebook.com/sharer/sharer.php'+facebookParameters;
+        Linking.openURL(url).then((data) => {
+          alert('Facebook Opened');
+        }).catch(() => {
+          alert('Something went wrong');
+        });
+      }
+
+      writeToClipboard = async () => {
+        //To copy the text to clipboard
+        this.setState({
+            active:false
+        });
+         Clipboard.setString(this.state.shareMessage);
+        //alert('Copied to Clipboard!');
+
+        console.log('copied');
+      };
     
     componentDidUpdate()
     {
@@ -128,6 +177,8 @@ class Dashboard extends Component{
        //console.log(Data);
        this.setState({isLoading:false});
       // this.animation.play();
+    //   this.animation1.play();
+  
       }
 
       _handleAppStateChange = async (nextAppState) => {
@@ -255,19 +306,19 @@ class Dashboard extends Component{
              return (
                  <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{Data.cn_confirmedcases}</Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.cn_active} </Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{Data.cn_recovered}</Text>
                      </View>
                      <View style={styles.textData}>
-                        <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                        <Text style={{fontFamily:'Right',fontSize:16,color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
                         <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.cn_deaths} </Text>
                      </View>
                  </Animated.View>
@@ -278,19 +329,19 @@ class Dashboard extends Component{
              return(
                 <Animated.View style={{flex:1,...animatedStyle}} onLoad={this.onLoad()}>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16,}}> {Data.sn_confirmed} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_active} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_recovered} </Text>
                 </View>
                 <View style={styles.textData}>
-                   <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+                   <Text style={{fontFamily:'Right',fontSize:16,color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
                    <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {Data.sn_deaths} </Text>
                 </View>
                 </Animated.View>
@@ -302,6 +353,66 @@ class Dashboard extends Component{
       this.WebView.stopLoading();
     }
       };
+
+      onLoadLottie1=()=>{
+          this.state.speed1.setValue(0);
+          Animated.timing(this.state.speed1,{
+              toValue:1,
+              duration:4000,
+              easing:Easing.linear,
+              useNativeDriver:true
+          }).start();
+      }
+      onLoadLottie2=()=>{
+        this.state.speed2.setValue(0);
+        Animated.timing(this.state.speed2,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+    onLoadLottie3=()=>{
+        this.state.speed3.setValue(0);
+        Animated.timing(this.state.speed3,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+    onLoadLottie4=()=>{
+        this.state.speed4.setValue(0);
+        Animated.timing(this.state.speed4,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+
+      handleScroll=(event)=> {
+          let value=event.nativeEvent.contentOffset.y;
+       // console.log(event.nativeEvent.contentOffset.y);
+        if(value>=20 && value<350)
+        {
+            this.onLoadLottie1();
+            
+        }
+         if(value>=360 && value<550)
+        {
+           this.onLoadLottie2();
+        }
+         if(value>500 && value<850)
+        {
+            this.onLoadLottie3();
+        }
+         if(value>=850 && value<1200)
+        {
+            this.onLoadLottie4();
+        }
+
+       }
     render()
     {
 
@@ -335,21 +446,21 @@ else
                         </Button>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
                     </View>
-                    <ScrollView>
+                    <ScrollView onScroll={this.handleScroll}>
                     <View style={styles.title}>
-                        <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
+                        <Text style={{fontSize:18,fontFamily:'Right',color:'#4E4E4E'}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
                     </View>
 
                     <View style={{flex:1,marginTop:10,padding:5}}>
                     <View style={{flexDirection:'row',alignItems:'stretch'}}>
                         <Button transparent onPress={()=>this.setState({currentTab:0})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===0 ? 2:0,width:'50%',justifyContent:'center'}}>
-                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===0 ? 'black':'grey',fontWeight:this.state.currentTab===0 ? 'bold':'normal',letterSpacing:1}}>
+                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===0 ? 'black':'grey',fontWeight:this.state.currentTab===0 ? 'bold':'normal',letterSpacing:1,fontFamily:'Right'}}>
                                 INDIA
                             </Text>
                         </Button>
                         <Button transparent onPress={()=>this.setState({currentTab:1})} style={{borderBottomColor:'black',borderBottomWidth:this.state.currentTab===1 ? 2:0,width:'50%',justifyContent:'center'}}>
-                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===1 ? 'black':'grey',fontWeight:this.state.currentTab===1 ? 'bold':'normal',letterSpacing:1}}>
+                            <Text style={{fontFamily:'MSRegular',color:this.state.currentTab===1 ? 'black':'grey',fontWeight:this.state.currentTab===1 ? 'bold':'normal',letterSpacing:1,fontFamily:'Right'}}>
                                 {this.state.userState.toUpperCase()}
                             </Text>
                         </Button>
@@ -367,32 +478,103 @@ else
                         
 
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'grey',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,fontWeight:'bold'}}>LATEST NEWS</Text>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
+                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
+
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')}  progress={this.state.speed1} /> 
+                        </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')}  progress={this.state.speed2}/> 
+                        </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')}  progress={this.state.speed3}/> 
+                        </View>
+                        
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
+
+                        <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')}  progress={this.state.speed4}/> 
+                        </View>
+                        
+                    </View>
+
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
+                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> Symptoms </Text>
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Cough.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>Initially productive cough or dry cough which increase day by day and have more spectum. Cough gets worse after few days.</Text>
+                            </View>
+                        </View>
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                        <View style={{width:width-200,justifyContent:'center',alignItems:'center',marginLeft:5}}>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>From day one the body tempertaure increases slightly. After 6 to 7 days high fever can be seen.</Text>
+                            </View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Fever.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            
+                        </View>
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Short-of-breath.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}>It’s the initial state of breathing/ respiratory problems. Difficulty in breathing or shortness of breath is the worse state.</Text>
+                            </View>
+                        </View>
+                       
 
                     </View>
 
-                    <View style={{flex:1}}>
-                            <AutoHeightWebView customScript={INJECTED_JS} source={{uri:'https://corona-go.info'}}   javaScriptEnabled={true}
-                                domStorageEnabled={true}
-                                startInLoadingState={true}
-                               
-                                ref={c => {
-                                    this.WebView = c;
-                                  }}
-                            scalesPageToFit={true} onLoadEnd={()=>this.setState({webViewLoading:false})} />
-                                {this.state.webViewLoading &&   <ActivityIndicator
-                                color="#009688"
-                                size="large"
-                                style={styles.ActivityIndicatorStyle}
-                            />}
-                            
-                        </View>
+
+                   
 
                     </ScrollView>
 
 
                 </View>
+                <Fab
+                active={this.state.active}
+                direction="up"
+                containerStyle={{ }}
+                style={{ backgroundColor: '#4e4e4e' }}
+                position="bottomRight"
+                onPress={() => this.setState({ active: !this.state.active })}>
+
+                <Icon name="share" />
+                <Button onPress={()=>{this.setState({active:!this.state.active});Linking.openURL('whatsapp://send?text='+this.state.shareMessage)}} style={{ backgroundColor: '#34A34F' }}>
+                <Icon name="logo-whatsapp" />
+                </Button>
+                <Button onPress={()=>{this.setState({active:false});this.postOnFacebook();}} style={{ backgroundColor: '#3B5998' }}>
+                <Icon name="logo-facebook" />
+                </Button>
+                <Button opPress={()=>this.writeToClipboard()} style={{ backgroundColor: '#DD5144' }}>
+                <FontAwesome5 name='paperclip' size={20} />
+                </Button>
+          </Fab>
 
             </ImageBackground>
         )
@@ -401,7 +583,8 @@ else
 
 const styles=StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        marginBottom:'2%'
     },
     title:{
         
@@ -438,6 +621,10 @@ const styles=StyleSheet.create({
           flexDirection:'row',
           justifyContent:'space-between',
           marginTop:'3%'
+      },
+      lottie: {
+        width: 200,
+        height: 200
       }
 
 })

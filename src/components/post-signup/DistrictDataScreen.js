@@ -122,7 +122,7 @@ class District extends Component
             borderRadius:20,
             elevation:5
              }}>
-          <Text style={{ fontWeight: "bold",fontFamily:'MSRegular',fontSize:16 ,color:'#4e4e4e'}}>
+          <Text style={{fontFamily:'Right',fontSize:16 ,color:'#4e4e4e'}}>
               {" "}{item.district}
             </Text>
             {expanded
@@ -136,19 +136,19 @@ class District extends Component
         return (
             <View style={{flex:1}} >
             <View style={styles.textData}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
+               <Text style={{fontFamily:'Right',fontSize:16,color:'blue',marginLeft:'10%',letterSpacing:1}}>Confirmed Cases</Text>
                <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{item.confirmed}</Text>
             </View>
             <View style={styles.textData}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
+               <Text style={{fontFamily:'Right',fontSize:16,color:'orange',marginLeft:'10%',letterSpacing:1}}>Active Cases</Text>
                <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {item.active} </Text>
             </View>
             <View style={styles.textData}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
+               <Text style={{fontFamily:'Right',fontSize:16,color:'green',marginLeft:'10%',letterSpacing:1}}>Recovered Cases</Text>
                <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}>{item.recovered}</Text>
             </View>
             <View style={styles.textData}>
-               <Text style={{fontFamily:'MSRegular',fontSize:16,fontWeight:'bold',color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
+               <Text style={{fontFamily:'Right',fontSize:16,color:'red',marginLeft:'10%',letterSpacing:1}}>Death Cases</Text>
                <Text style={{fontFamily:'MSRegular',marginRight:'10%',fontSize:16}}> {item.deceased} </Text>
             </View>
         </View>
@@ -171,9 +171,9 @@ class District extends Component
             <Button transparent style={{position:'absolute',top:8,left:12}} onPress={()=>this.props.navigation.goBack()}>
                        <Ionicons color='#ef8354' name="md-arrow-round-back" size={32}/>
                     </Button>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
-                     <Text style={{fontWeight:'bold',fontSize:18,marginVertical:'4%'}}> {" "}{districtdata.state} :- District wise Data </Text>
+            <View style={{justifyContent:'center',alignItems:'center',marginTop:'2%'}}>
+                    <Text style={{fontFamily:'Right',fontSize:18,color:'#4E4E4E'}}>COVID-19 Dashboard</Text>
+                     <Text style={{fontFamily:'Right',fontSize:18,marginVertical:'4%'}}> {" "}{districtdata.state} :- District wise Data </Text>
             </View>
 
             

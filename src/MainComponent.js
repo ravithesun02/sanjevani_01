@@ -19,6 +19,7 @@ import District from './components/post-signup/DistrictDataScreen';
 import GovtNotify from './components/post-signup/GovtNotification';
 import Hospital from './components/post-signup/hospital';
 
+const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const {height,width}=Dimensions.get('window');
 var profile='';
 var name='';
@@ -32,26 +33,26 @@ class Main extends Component{
    
   }
 
-  async componentDidMount()
-  {
-    try
-    {
-      let value=await AsyncStorage.getItem('userinfo');
-      if(value!=null)
-      {
-        profile=JSON.parse(value).profile_pic;
-        name=JSON.parse(value).first_name;
-        email=JSON.parse(value).email;
-       // console.log(profile);
-       mobile='+91'+JSON.parse(value).mobile;
-      }
+  // async componentDidMount()
+  // {
+  //   try
+  //   {
+  //     let value=await AsyncStorage.getItem('userinfo');
+  //     if(value!=null)
+  //     {
+  //       profile=JSON.parse(value).profile_pic;
+  //       name=JSON.parse(value).first_name;
+  //       email=JSON.parse(value).email;
+  //      // console.log(profile);
+  //      mobile='+91'+JSON.parse(value).mobile;
+  //     }
 
-    }
-    catch(error)
-    {
-      console.error(error);
-    }
-  }
+  //   }
+  //   catch(error)
+  //   {
+  //     console.error(error);
+  //   }
+  // }
 
   
 
@@ -75,8 +76,30 @@ const DataStack=createStackNavigator({
   }
 });
 
+loadProfileData= async()=>{
+  await sleep(4000);
+  console.log('called');
+  try
+    {
+      let value=await AsyncStorage.getItem('userinfo');
+      if(value!=null)
+      {
+        profile=JSON.parse(value).profile_pic;
+        name=JSON.parse(value).first_name;
+        email=JSON.parse(value).email;
+       // console.log(profile);
+       mobile='+91'+JSON.parse(value).mobile;
+      }
+
+    }
+    catch(error)
+    {
+      console.error(error);
+    }
+}
+
 const CustomDrawer=(props)=>(
-  <ImageBackground source={require('./components/assests/images/drawer.png')} style={{width:'100%',height:'100%'}}>
+  <ImageBackground source={require('./components/assests/images/drawer.png')} style={{width:'100%',height:'100%'}} onLoadStart={()=>loadProfileData()}>
               
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
@@ -87,14 +110,14 @@ const CustomDrawer=(props)=>(
       <Image source={{uri:profile}} style={{height:100,width:100,borderRadius:50,borderColor:'#e4e4e4',borderWidth:1}} />
       </View>
       <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
-      <Text style={{fontFamily:'MSRegular',fontSize:14,fontWeight:'bold',marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
+      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
 
       </View>
     </View>
     <ScrollView >
-    <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontWeight:'bold',fontFamily:'MSRegular',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
+    <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontFamily:'Right',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
     </ScrollView>
     <View style={{justifyContent:'flex-end',alignItems:'center',backgroundColor:'#9E9E9E',padding:5}}>
       <Text style={{color:'#F3EDEA'}}>Version : 0.1 Beta</Text>
