@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import {View,Text, Image, ImageBackground, StyleSheet,AsyncStorage} from 'react-native';
+import {View,Text, Image, ImageBackground, StyleSheet,AsyncStorage, StatusBar} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import firebase from 'firebase';
 import { baseURL } from './assests/reuse/baseUrl';
@@ -98,6 +98,7 @@ class SplashScreen extends Component{
     {
         return(
             <View style={{flex:1,flexDirection:'column'}}>
+                <StatusBar hidden/>
                 <ImageBackground source={require('./assests/images/Front-page.png')} style={styles.image}/>
                 
                    

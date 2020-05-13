@@ -43,7 +43,11 @@ class Dashboard extends Component{
             appState:AppState.currentState,
             active:false,
             shareMessage:'This is from sanjevani',
-            FacebookShareURL:'https://sanjevani.com/'
+            FacebookShareURL:'https://sanjevani.com/',
+            speed1:0,
+            speed2:0,
+            spped3:0,
+            speed4:0
 
         }
     }
@@ -132,7 +136,7 @@ class Dashboard extends Component{
         this.setState({
             active:false
         });
-        await Clipboard.setString(this.state.shareMessage);
+         Clipboard.setString(this.state.shareMessage);
         //alert('Copied to Clipboard!');
 
         console.log('copied');
@@ -173,6 +177,8 @@ class Dashboard extends Component{
        //console.log(Data);
        this.setState({isLoading:false});
       // this.animation.play();
+    //   this.animation1.play();
+  
       }
 
       _handleAppStateChange = async (nextAppState) => {
@@ -347,6 +353,37 @@ class Dashboard extends Component{
       this.WebView.stopLoading();
     }
       };
+
+      handleScroll=(event)=> {
+          let value=event.nativeEvent.contentOffset.y;
+       // console.log(event.nativeEvent.contentOffset.y);
+        if(value>=50 && value<400)
+        {
+            this.animation1.play();
+            this.setState({speed1:1,speed2:0,speed3:0,speed4:0});
+            
+        }
+         if(value>=360 && value<550)
+        {
+            this.animation2.play();
+            this.setState({speed2:1,speed3:0,speed4:0});
+        }
+         if(value>500 && value<880)
+        {
+            this.animation3.play();
+            this.setState({speed1:0,speed3:1,speed4:1});
+        }
+         if(value>700 && value<1200)
+        {
+            this.animation4.play();
+            this.setState({speed2:0,speed4:1});
+        }
+        else
+        {
+            this.setState({speed1:0,speed2:0,speed3:0,speed4:0});
+        }
+
+       }
     render()
     {
 
@@ -380,7 +417,7 @@ else
                         </Button>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
                     </View>
-                    <ScrollView>
+                    <ScrollView onScroll={this.handleScroll}>
                     <View style={styles.title}>
                         <Text style={{fontWeight:'bold',fontSize:18}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
@@ -420,7 +457,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')} autoPlay loop/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')} ref={animation1=>{this.animation1=animation1}} speed={this.state.speed1} /> 
                         </View>
                         
                     </View>
@@ -428,7 +465,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')} autoPlay loop/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')} ref={animation2=>{this.animation2=animation2}} speed={this.state.speed2}/> 
                         </View>
                         
                     </View>
@@ -436,7 +473,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')} autoPlay loop/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')} ref={animation3=>{this.animation3=animation3}} speed={this.state.speed3}/> 
                         </View>
                         
                     </View>
@@ -444,9 +481,43 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')} autoPlay loop/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')} ref={animation4=>{this.animation4=animation4}} speed={this.state.speed4}/> 
                         </View>
                         
+                    </View>
+
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
+                        <Text style={{fontSize:20,fontWeight:'bold',color:'#B8876B'}}> Symptoms </Text>
+                    </View>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Cough.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{fontFamily:'MSRegular'}}>Initially productive cough or dry cough which increase day by day and have more spectum. Cough gets worse after few days.</Text>
+                            </View>
+                        </View>
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                        <View style={{width:width-200,justifyContent:'center',alignItems:'center',marginLeft:5}}>
+                                <Text style={{fontFamily:'MSRegular'}}>From day one the body tempertaure increases slightly. After 6 to 7 days high fever can be seen.</Text>
+                            </View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Fever.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            
+                        </View>
+                        <View style={{flex:1 , flexDirection:'row' }}>
+                            <View style={{justifyContent:'center',alignItems:'center',width:200,height:200}}>
+                            <Image source={require('../assests/images/Short-of-breath.png')} style={{width:'100%',height:'100%'}} />
+                            </View>
+                            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{fontFamily:'MSRegular'}}>It’s the initial state of breathing/ respiratory problems. Difficulty in breathing or shortness of breath is the worse state.</Text>
+                            </View>
+                        </View>
+                       
+
                     </View>
 
 
