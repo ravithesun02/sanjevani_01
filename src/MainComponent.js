@@ -18,6 +18,7 @@ import Overall from './components/post-signup/OverallDataScreen';
 import District from './components/post-signup/DistrictDataScreen';
 import GovtNotify from './components/post-signup/GovtNotification';
 
+const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const {height,width}=Dimensions.get('window');
 var profile='';
 var name='';
@@ -31,26 +32,26 @@ class Main extends Component{
    
   }
 
-  async componentDidMount()
-  {
-    try
-    {
-      let value=await AsyncStorage.getItem('userinfo');
-      if(value!=null)
-      {
-        profile=JSON.parse(value).profile_pic;
-        name=JSON.parse(value).first_name;
-        email=JSON.parse(value).email;
-       // console.log(profile);
-       mobile='+91'+JSON.parse(value).mobile;
-      }
+  // async componentDidMount()
+  // {
+  //   try
+  //   {
+  //     let value=await AsyncStorage.getItem('userinfo');
+  //     if(value!=null)
+  //     {
+  //       profile=JSON.parse(value).profile_pic;
+  //       name=JSON.parse(value).first_name;
+  //       email=JSON.parse(value).email;
+  //      // console.log(profile);
+  //      mobile='+91'+JSON.parse(value).mobile;
+  //     }
 
-    }
-    catch(error)
-    {
-      console.error(error);
-    }
-  }
+  //   }
+  //   catch(error)
+  //   {
+  //     console.error(error);
+  //   }
+  // }
 
   
 
@@ -74,8 +75,30 @@ const DataStack=createStackNavigator({
   }
 });
 
+loadProfileData= async()=>{
+  await sleep(2000);
+  console.log('called');
+  try
+    {
+      let value=await AsyncStorage.getItem('userinfo');
+      if(value!=null)
+      {
+        profile=JSON.parse(value).profile_pic;
+        name=JSON.parse(value).first_name;
+        email=JSON.parse(value).email;
+       // console.log(profile);
+       mobile='+91'+JSON.parse(value).mobile;
+      }
+
+    }
+    catch(error)
+    {
+      console.error(error);
+    }
+}
+
 const CustomDrawer=(props)=>(
-  <ImageBackground source={require('./components/assests/images/drawer.png')} style={{width:'100%',height:'100%'}}>
+  <ImageBackground source={require('./components/assests/images/drawer.png')} style={{width:'100%',height:'100%'}} onLoadStart={()=>loadProfileData()}>
               
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>

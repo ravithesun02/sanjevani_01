@@ -86,6 +86,7 @@ class SplashScreen extends Component{
 
         else
         {
+            await sleep(2000);
            
             this.props.navigation.navigate('Swipe');
         }

@@ -44,10 +44,10 @@ class Dashboard extends Component{
             active:false,
             shareMessage:'This is from sanjevani',
             FacebookShareURL:'https://sanjevani.com/',
-            speed1:0,
-            speed2:0,
-            spped3:0,
-            speed4:0
+            speed1:new Animated.Value(0),
+            speed2:new Animated.Value(0),
+            speed3:new Animated.Value(0),
+            speed4:new Animated.Value(0)
 
         }
     }
@@ -354,33 +354,62 @@ class Dashboard extends Component{
     }
       };
 
+      onLoadLottie1=()=>{
+          this.state.speed1.setValue(0);
+          Animated.timing(this.state.speed1,{
+              toValue:1,
+              duration:4000,
+              easing:Easing.linear,
+              useNativeDriver:true
+          }).start();
+      }
+      onLoadLottie2=()=>{
+        this.state.speed2.setValue(0);
+        Animated.timing(this.state.speed2,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+    onLoadLottie3=()=>{
+        this.state.speed3.setValue(0);
+        Animated.timing(this.state.speed3,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+    onLoadLottie4=()=>{
+        this.state.speed4.setValue(0);
+        Animated.timing(this.state.speed4,{
+            toValue:1,
+            duration:4000,
+            easing:Easing.linear,
+            useNativeDriver:true
+        }).start();
+    }
+
       handleScroll=(event)=> {
           let value=event.nativeEvent.contentOffset.y;
        // console.log(event.nativeEvent.contentOffset.y);
-        if(value>=50 && value<400)
+        if(value>=20 && value<350)
         {
-            this.animation1.play();
-            this.setState({speed1:1,speed2:0,speed3:0,speed4:0});
+            this.onLoadLottie1();
             
         }
          if(value>=360 && value<550)
         {
-            this.animation2.play();
-            this.setState({speed2:1,speed3:0,speed4:0});
+           this.onLoadLottie2();
         }
-         if(value>500 && value<880)
+         if(value>500 && value<850)
         {
-            this.animation3.play();
-            this.setState({speed1:0,speed3:1,speed4:1});
+            this.onLoadLottie3();
         }
-         if(value>700 && value<1200)
+         if(value>=850 && value<1200)
         {
-            this.animation4.play();
-            this.setState({speed2:0,speed4:1});
-        }
-        else
-        {
-            this.setState({speed1:0,speed2:0,speed3:0,speed4:0});
+            this.onLoadLottie4();
         }
 
        }
@@ -457,7 +486,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')} ref={animation1=>{this.animation1=animation1}} speed={this.state.speed1} /> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')}  progress={this.state.speed1} /> 
                         </View>
                         
                     </View>
@@ -465,7 +494,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')} ref={animation2=>{this.animation2=animation2}} speed={this.state.speed2}/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')}  progress={this.state.speed2}/> 
                         </View>
                         
                     </View>
@@ -473,7 +502,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')} ref={animation3=>{this.animation3=animation3}} speed={this.state.speed3}/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')}  progress={this.state.speed3}/> 
                         </View>
                         
                     </View>
@@ -481,7 +510,7 @@ else
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')} ref={animation4=>{this.animation4=animation4}} speed={this.state.speed4}/> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')}  progress={this.state.speed4}/> 
                         </View>
                         
                     </View>
