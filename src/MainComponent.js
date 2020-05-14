@@ -17,6 +17,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Overall from './components/post-signup/OverallDataScreen';
 import District from './components/post-signup/DistrictDataScreen';
 import GovtNotify from './components/post-signup/GovtNotification';
+import Hospital from './components/post-signup/hospital';
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const {height,width}=Dimensions.get('window');
@@ -142,6 +143,9 @@ const DrawerNavigator=createDrawerNavigator({
   },
   'Learn COVID 19':{
     screen:LearnCOVID
+  },
+  'Hospital':{
+    screen:Hospital
   }
 },{
   initialRouteName:'Home',
