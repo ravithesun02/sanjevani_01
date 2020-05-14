@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/google-signin": "^4.0.0",
     "@react-native-community/masked-view": "^0.1.10",
     "expo-image-picker": "^8.1.0",

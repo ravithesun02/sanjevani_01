@@ -18,6 +18,7 @@ import Overall from './components/post-signup/OverallDataScreen';
 import District from './components/post-signup/DistrictDataScreen';
 import GovtNotify from './components/post-signup/GovtNotification';
 import Hospital from './components/post-signup/hospital';
+import { Root } from 'native-base';
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const {height,width}=Dimensions.get('window');
@@ -58,10 +59,10 @@ class Main extends Component{
 
     render(){
         return(
-            <>
+            <Root>
         
            <AppContainer/>
-           </>
+           </Root>
         )
     }
 }
@@ -144,7 +145,7 @@ const DrawerNavigator=createDrawerNavigator({
   'Learn COVID 19':{
     screen:LearnCOVID
   },
-  'Hospital':{
+  'Help Centers':{
     screen:Hospital
   }
 },{
