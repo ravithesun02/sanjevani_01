@@ -110,10 +110,13 @@ const CustomDrawer=(props)=>(
       </View>
       <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
       <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
-      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
       <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
 
       </View>
+    </View>
+    <View style={{marginVertical:'2%' ,justifyContent:'center',alignItems:'center'}}>
+    <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
+      
     </View>
     <ScrollView >
     <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontFamily:'Right',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>

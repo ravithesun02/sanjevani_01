@@ -174,6 +174,7 @@ const taskRandom = async taskData => {
       if(data.code == 2)
       {
         console.log('Deleted successfully');
+        firstLocalNotification('You are SAFE now ! Stay at Home');
       }
     })
     .catch((err)=>console.log(err.message));
@@ -250,7 +251,7 @@ const taskRandom = async taskData => {
         if(counter!=0)
         {
          await deleteLocation();
-         firstLocalNotification('You are SAFE now ! Stay at Home');
+         
           sleep(3000);
           counter=0;
           distance=500;
