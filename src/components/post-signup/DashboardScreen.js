@@ -1,6 +1,6 @@
 import React ,{Component} from 'react';
 import { View, Text, ImageBackground, StyleSheet,Image,Dimensions,Animated,Clipboard,Easing,AppState ,AsyncStorage,ActivityIndicator, Linking} from 'react-native';
-import {Button, Container, Fab,Icon} from 'native-base';
+import {Button, Container, Fab,Icon, Toast, Accordion} from 'native-base';
 import firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 import LocationModule from '../assests/reuse/LocationComponent';
@@ -47,7 +47,8 @@ class Dashboard extends Component{
             speed1:new Animated.Value(0),
             speed2:new Animated.Value(0),
             speed3:new Animated.Value(0),
-            speed4:new Animated.Value(0)
+            speed4:new Animated.Value(0),
+            newsData:[]
 
         }
     }
@@ -98,6 +99,36 @@ class Dashboard extends Component{
         catch(err)
         {
             console.log(err);
+        }
+    }
+
+    //fetch news
+    fetchNews=async()=>{
+        try
+        {
+            let res=await fetch('http://newsapi.org/v2/top-headlines?country=in&q=corona',{
+                method:'GET',
+                headers:{
+                    Authorization:'Bearer 49e8c42e49a84330ba7a21b1c6e7c9eb'
+                }
+            });
+
+            if(res.ok)
+            {
+                let data=await res.json();
+                this.setState({
+                    newsData:data.articles
+                });
+
+            }
+        }
+        catch(error)
+        {
+            Toast.show({
+                text:'Network Error',
+                position:'top',
+                type:'danger'
+            });
         }
     }
 
@@ -174,6 +205,8 @@ class Dashboard extends Component{
        console.log('running');
 
        await this.fetchData();
+
+       await this.fetchNews();
        //console.log(Data);
        this.setState({isLoading:false});
       // this.animation.play();
@@ -392,42 +425,73 @@ class Dashboard extends Component{
     }
 
       handleScroll=(event)=> {
-          let value=event.nativeEvent.contentOffset.y;
-       // console.log(event.nativeEvent.contentOffset.y);
-        if(value>=20 && value<350)
-        {
-            this.onLoadLottie1();
-            
-        }
-         if(value>=360 && value<550)
+        let value=event.nativeEvent.contentOffset.x;
+       // console.log(event.nativeEvent.contentOffset.x);
+        
+         if(value>=110 && value<460)
         {
            this.onLoadLottie2();
         }
-         if(value>500 && value<850)
+         if(value>420 && value<620)
         {
             this.onLoadLottie3();
         }
-         if(value>=850 && value<1200)
+         if(value>=620)
         {
             this.onLoadLottie4();
         }
 
        }
+
+       _renderHeader=(item,expanded)=>
+       {
+            return(
+                <View style={{flex:1}}>
+                    <Button rounded disabled transparent style={{marginBottom:'3%',marginLeft:'2%',marginTop:'1%',borderColor:'#feb3ce',borderWidth:3,backgroundColor:'#71b2f2',width:'20%',justifyContent:'center'}}>
+                        <Text style={{fontFamily:'Right'}}> {new Date(item.publishedAt).toTimeString().toString().substring(0,5)} </Text>
+                    </Button>
+                    <View style={{
+              flexDirection: "row",
+              padding: 10,
+              justifyContent: "space-between",
+              alignItems: "center" ,
+              margin:5
+               }}>
+            <Text style={{ fontFamily:'Right',fontSize:16 ,color:'#4e4e4e',width:'90%'}}>
+                {" "}{item.title}
+              </Text>
+              {expanded
+                ? <Icon style={{ fontSize: 18 }} name="remove-circle"  />
+                : <Icon style={{ fontSize: 18 }} name="add-circle"/>}
+            </View>
+                </View>
+            )
+       }
+       _renderContent=(item)=>{
+
+        return(
+            <View>
+            <View style={{flex:1 , flexDirection:'row',justifyContent:'space-around' }}>
+            <View style={{justifyContent:'center',alignItems:'center',width:150,height:150}}>
+            <Image source={{uri:item.urlToImage}} style={{width:'100%',height:'100%'}} />
+            </View>
+            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}> {item.description} </Text>
+               
+            </View>
+          
+        </View>
+        <View style={{flex:1 , justifyContent:'center',alignItems:'flex-end'}}>
+                    <Button transparent style={{padding:10,backgroundColor:'#528EA0',borderTopLeftRadius:20,borderBottomLeftRadius:20}} onPress={()=>Linking.openURL(item.url)}>
+                        <Text style={{fontFamily:'MSRegular',color:'#FFFFFF',textDecorationLine:'underline'}}> Read More... </Text>
+                    </Button>
+                </View>
+        </View>
+        )
+
+       }
     render()
     {
-
-        const INJECTED_JS=`(function(){
-
-            document.querySelectorAll('.col-lg-12').forEach((item)=>{
-                item.remove();
-            });
-            document.querySelector('.navbar').remove();
-            document.querySelector('.col-md-8').remove();
-            document.body.style.background = 'transparent';
-            document.querySelectorAll('a').forEach((item)=>{item.removeAttribute('href')});
-
-
-        })();`;
 
         if(this.state.isLoading)
         {
@@ -446,7 +510,7 @@ else
                         </Button>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
                     </View>
-                    <ScrollView onScroll={this.handleScroll}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.title}>
                         <Text style={{fontSize:18,fontFamily:'Right',color:'#4E4E4E'}}>COVID-19 Dashboard</Text>
                         <Text style={{fontSize:10,fontWeight:'bold'}}>As on : {new Date(Data.lastFetch).toDateString()} {new Date(Data.lastFetch).toTimeString()}  </Text>
@@ -469,9 +533,9 @@ else
                   {this.renderData()}
 
                 </View>
-                <View style={{flex:1 , justifyContent:'center',marginRight:'3%',alignItems:'flex-end'}}>
-                    <Button transparent rounded style={{padding:10}} onPress={()=>this.props.navigation.navigate('Overall Data')}>
-                        <Text style={{fontFamily:'MSRegular',color:'grey',textDecorationLine:'underline'}}>Overall Stats</Text>
+                <View style={{flex:1 , justifyContent:'center',alignItems:'flex-end'}}>
+                    <Button transparent  style={{padding:10,backgroundColor:'#528EA0',borderTopLeftRadius:20,borderBottomLeftRadius:20}} onPress={()=>this.props.navigation.navigate('Overall Data')}>
+                        <Text style={{fontFamily:'MSRegular',color:'#ffffff',textDecorationLine:'underline'}}>Overall Stats</Text>
                     </Button>
                 </View>
                   
@@ -487,15 +551,16 @@ else
                         <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
 
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                    <ScrollView showsHorizontalScrollIndicator={false} onScroll={this.handleScroll} horizontal={true} contentContainerStyle={{justifyContent:'center',alignItems:'center',paddingBottom:'4%',paddingRight:'2%',paddingLeft:'2%',elevation:20}} >
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')}  progress={this.state.speed1} /> 
+                        <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')}  autoPlay loop /> 
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:width*3/4}}>
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
@@ -503,7 +568,7 @@ else
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
@@ -511,7 +576,7 @@ else
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
                         <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
 
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
@@ -519,6 +584,8 @@ else
                         </View>
                         
                     </View>
+
+                    </ScrollView>
 
                     <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
                         <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> Symptoms </Text>
@@ -554,10 +621,19 @@ else
 
                     </View>
 
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
+                        <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> Latest News </Text>
+                    </View>
+                    <Accordion 
+                    expanded={true}
+                    animation={true}
+                    dataArray={this.state.newsData}
+                    renderHeader={this._renderHeader}
+                    renderContent={this._renderContent}
+              />
+              </ScrollView>
 
-                   
-
-                    </ScrollView>
+             
 
 
                 </View>
@@ -566,7 +642,7 @@ else
                 direction="up"
                 containerStyle={{ }}
                 style={{ backgroundColor: '#4e4e4e' }}
-                position="bottomRight"
+                position='bottomLeft'
                 onPress={() => this.setState({ active: !this.state.active })}>
 
                 <Icon name="share" />
