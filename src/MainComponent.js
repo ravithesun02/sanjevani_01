@@ -104,7 +104,7 @@ const CustomDrawer=(props)=>(
               
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
-    <View style={{alignItems:'center',flexDirection:'row',padding:10,borderBottomColor:'black',borderBottomWidth:1}}>
+    <View style={{alignItems:'center',flexDirection:'row',padding:10,paddingBottom:0}}>
       <View style={{height:105,width:105,justifyContent:'center',alignItems:'center',borderRadius:50,elevation:10}}>
 
       
@@ -116,7 +116,7 @@ const CustomDrawer=(props)=>(
 
       </View>
     </View>
-    <View style={{marginVertical:'2%' ,justifyContent:'center',alignItems:'center'}}>
+    <View style={{marginVertical:'2%' ,justifyContent:'center',paddingBottom:5,alignItems:'center',borderBottomColor:'black',borderBottomWidth:1}}>
     <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
       
     </View>

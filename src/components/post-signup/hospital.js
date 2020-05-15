@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import Loader from '../assests/reuse/loadingScreen';
 import { Container, Content, Form, Picker, Accordion ,Icon, Button,Item, Label, Toast} from 'native-base';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import {View,Text, Linking, ImageBackground,Image, StyleSheet,Switch, ActivityIndicator} from 'react-native';
+import {View,Text, Linking, ImageBackground,Image, StyleSheet,Switch, ActivityIndicator,Animated,Easing} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -23,7 +23,8 @@ class Hospital extends React.PureComponent{
             selectedCategory:'all_category',
             renderData:[],
             isEnabled:false,
-            isContentLoading:false
+            isContentLoading:false,
+            opacity:new Animated.Value(0)
         }
     }
     
@@ -362,11 +363,12 @@ class Hospital extends React.PureComponent{
 
     }
 
-    toggler=()=>{
-        this.setState({isContentLoading:true});
+    toggler=async()=>{
+     
+       await this.setState({isEnabled:!this.state.isEnabled});
 
-        this.setState({
-            isEnabled:!this.state.isEnabled,
+        if(!this.state.isEnabled)
+             this.setState({
             selectedCategory:'all_category',
             selectedCity:'all_city',
             selectedState:'all_state'
@@ -374,12 +376,27 @@ class Hospital extends React.PureComponent{
 
         this.onStateChange('all_state');
 
-        this.setState({isContentLoading:false});
+       
 
     }
 
+    onLoad = () => {
+        //console.log('anime');
+        this.state.opacity.setValue(0);
+       Animated.timing(this.state.opacity, {
+         toValue: 1,
+         duration: 1000,
+         useNativeDriver: true,
+       }).start();
+     }
+
     render()
     {
+        const animatedStyle = {
+ 
+            opacity: this.state.opacity
+       
+          }
 
         const renderState=this.state.states.map((item,index)=>{
             return(
@@ -432,7 +449,7 @@ class Hospital extends React.PureComponent{
 
                     {
                         this.state.isEnabled &&
-                        <View style={{backgroundColor:'#dcdcdc',elevation:10,padding:'2%',borderRadius:20}}>
+                        <Animated.View style={{backgroundColor:'#dcdcdc',elevation:10,padding:'2%',borderRadius:20,...animatedStyle}} onLoad={this.onLoad()} >
                        <Form>
                            <View style={{flexDirection:'row',marginTop:'2%'}}>
                                <View style={{width:'50%',justifyContent:'center'}}>
@@ -477,7 +494,7 @@ class Hospital extends React.PureComponent{
 
                            </Picker>
                        </Form>
-                       </View>
+                       </Animated.View>
 
                     }
 

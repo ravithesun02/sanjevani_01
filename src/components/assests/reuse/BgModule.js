@@ -17,9 +17,12 @@ var home_lat=0;
 var home_lon=0;
 var optionsLoc={
   "accuracy":Location.Accuracy.Balanced,
-  "timeInterval":10000,
-  "distanceInterval":distance
+  "timeInterval":10000
 };
+var lastLocation={
+  latitude:0,
+  longitude:0
+}
 var coveredDistance=0;
 
 const taskRandom = async taskData => {
@@ -93,11 +96,19 @@ const taskRandom = async taskData => {
       {
         counter++;
         console.log('Posted location');
-        firstLocalNotification(`You have crossed ${Math.floor(coveredDistance/1000)} m from your home`);
+        firstLocalNotification(`You have crossed ${coveredDistance/1000} Km from your home`);
            
       }
     })
-    .catch((err)=>console.log(err.message));
+    .catch(async(err)=>{
+      console.log(err);
+      console.log(err.message);
+      if(err.message==='Error503:undefined')
+      {
+        console.log('updating');
+        await updateLocation(locations);
+      }
+    });
 
   }
 
@@ -224,9 +235,12 @@ const taskRandom = async taskData => {
      // console.log(location);
       let lat=location.coords.latitude;
       let lon=location.coords.longitude;
+      
+      if(fakecalculateDistance(lat,lon)<500)
+      {
       let distancecovered=calculateDistance(lat,lon);
-     // console.log(distancecovered);
-      if(distancecovered>1000)
+      console.log(distancecovered);
+      if(distancecovered>50)
       {
           if(counter==0)
           {
@@ -259,7 +273,16 @@ const taskRandom = async taskData => {
         
           
       }
+      lastLocation.longitude=lon;
+      lastLocation.latitude=lat;
+
+      console.log(lastLocation);
     }
+    else
+    {
+      console.log(fakecalculateDistance(lat,lon));
+    }
+  }
   });
   const calculateDistance=(latitude,longitude)=>{
     let start={
@@ -274,6 +297,21 @@ const taskRandom = async taskData => {
     return haversine(start,end,{unit:'meter'});
 
   }
+
+  const fakecalculateDistance=(latitude,longitude)=>{
+    let start={
+      latitude:lastLocation.latitude,
+      longitude:lastLocation.longitude
+    };
+    let end={
+      latitude:latitude,
+      longitude:longitude
+    };
+
+    return haversine(start,end,{unit:'meter'});
+
+  }
+
   const options = {
     taskName: 'sanjevani_always',
     taskTitle: 'SANJEVANI',
@@ -370,6 +408,8 @@ const taskRandom = async taskData => {
          // console.log(result);
           home_lat=result.home_location.latitude;
           home_lon=result.home_location.longitude;
+          lastLocation.latitude=home_lat;
+          lastLocation.longitude=home_lon;
           this.locationStatus();
         }
       })

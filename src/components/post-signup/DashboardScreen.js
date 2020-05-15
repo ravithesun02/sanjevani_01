@@ -470,7 +470,7 @@ else
 
                 </View>
                 <View style={{flex:1 , justifyContent:'center',marginRight:'3%',alignItems:'flex-end'}}>
-                    <Button transparent rounded style={{padding:10,elevation:5}} onPress={()=>this.props.navigation.navigate('Overall Data')}>
+                    <Button transparent rounded style={{padding:10}} onPress={()=>this.props.navigation.navigate('Overall Data')}>
                         <Text style={{fontFamily:'MSRegular',color:'grey',textDecorationLine:'underline'}}>Overall Stats</Text>
                     </Button>
                 </View>
@@ -483,8 +483,8 @@ else
                         
 
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
+                        <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
 
                     </View>
                     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -520,8 +520,8 @@ else
                         
                     </View>
 
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,elevation:5,padding:10,margin:10}}>
-                        <Text style={{fontSize:20,color:'#B8876B',fontFamily:'Right'}}> Symptoms </Text>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
+                        <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> Symptoms </Text>
                     </View>
                     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
 
