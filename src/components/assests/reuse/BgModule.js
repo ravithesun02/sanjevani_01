@@ -240,7 +240,7 @@ const taskRandom = async taskData => {
       {
       let distancecovered=calculateDistance(lat,lon);
       console.log(distancecovered);
-      if(distancecovered>50)
+      if(distancecovered>700)
       {
           if(counter==0)
           {
