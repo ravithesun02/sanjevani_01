@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  StyleSheet, Text, View,Image} from 'react-native';
+import {  StyleSheet, Text, View,Image, StatusBar} from 'react-native';
 import {Button } from 'native-base';
 
 
@@ -66,6 +66,7 @@ export default class SwipeImage extends Component {
   render() {
     return (
       <Swiper style={styles.wrapper} loop={false} showsButtons={false}>
+        <StatusBar hidden/>
         <View style={styles.slide1}>
           
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>

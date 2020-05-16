@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet ,View} from 'react-native';
+import { StyleSheet ,View, StatusBar} from 'react-native';
 
 import LottieView from 'lottie-react-native';
  
@@ -14,6 +14,7 @@ export default class Loader extends React.Component {
    
     return (
       <View style={styles.container}>
+        <StatusBar hidden/>
         <LottieView source={require('../images/21166-covid-19-virus.json')} 
          ref={animation => {
           this.animation = animation;

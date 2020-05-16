@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ListView, ScrollView,Modal,} from 'react-native'
+import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ListView, ScrollView,Modal, StatusBar,} from 'react-native'
 import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
@@ -300,6 +300,7 @@ error=>{
 else
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
+         <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
          <Modal 
             onDismiss={()=>{this.state.openSetting?this.opensettings():undefined}}
             visible={this.state.isModal}

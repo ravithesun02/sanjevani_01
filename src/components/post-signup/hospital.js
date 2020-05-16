@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import Loader from '../assests/reuse/loadingScreen';
 import { Container, Content, Form, Picker, Accordion ,Icon, Button,Item, Label, Toast} from 'native-base';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import {View,Text, Linking, ImageBackground,Image, StyleSheet,Switch, ActivityIndicator,Animated,Easing} from 'react-native';
+import {View,Text, Linking, ImageBackground,Image, StyleSheet,Switch, ActivityIndicator,Animated,Easing, StatusBar} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -422,7 +422,7 @@ class Hospital extends React.PureComponent{
             return(
                
                   <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
-
+                      <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
                       <View style={{flex:1,justifyContent:'center',marginBottom:'3%'}}>
 
                       <View style={styles.titleImage}>

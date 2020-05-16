@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import { Text,ImageBackground,View,StyleSheet} from 'react-native';
+import { Text,ImageBackground,View,StyleSheet, StatusBar} from 'react-native';
 import Loader from '../assests/reuse/loadingScreen';
 import {Button,Accordion,Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -167,7 +167,7 @@ class District extends Component
         else
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
-               
+            <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
             <Button transparent style={{position:'absolute',top:8,left:12}} onPress={()=>this.props.navigation.goBack()}>
                        <Ionicons color='#ef8354' name="md-arrow-round-back" size={32}/>
                     </Button>

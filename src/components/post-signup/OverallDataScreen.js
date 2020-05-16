@@ -1,6 +1,6 @@
 import React ,{Component} from 'react';
 import { Container, Content,Button, Accordion ,Icon} from 'native-base';
-import { AsyncStorage, View, Text ,ImageBackground,Animated, StyleSheet} from 'react-native';
+import { AsyncStorage, View, Text ,ImageBackground,Animated, StyleSheet, StatusBar} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../assests/reuse/loadingScreen';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
@@ -140,7 +140,7 @@ class Overall extends Component{
 
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
-               
+               <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
                 <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
                            <Ionicons color='#ef8354' name="md-menu" size={32}/>
                         </Button>

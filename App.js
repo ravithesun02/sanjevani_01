@@ -15,7 +15,7 @@ class App extends React.Component{
   {
     return(
       <Root>
-        <StatusBar hidden/>
+      {/* <StatusBar hidden/> */}
      <Main/>
      </Root>
     )
