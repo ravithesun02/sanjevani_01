@@ -11,12 +11,12 @@ import PushNotification from 'react-native-push-notification';
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 
 var jwt_token=null;
-var counter=0;
+var counter;
 var distance=500;
 var home_lat=0;
 var home_lon=0;
 var optionsLoc={
-  "accuracy":Location.Accuracy.Balanced,
+  "accuracy":Location.Accuracy.High,
   "timeInterval":10000
 };
 var lastLocation={
@@ -232,57 +232,53 @@ const taskRandom = async taskData => {
       var { locations } = data;
      // console.log(locations);
       var location=locations[0];
-     // console.log(location);
+     console.log(location);
       let lat=location.coords.latitude;
       let lon=location.coords.longitude;
-      
-      if(fakecalculateDistance(lat,lon)<500)
-      {
-      let distancecovered=calculateDistance(lat,lon);
-      console.log(distancecovered);
-      if(distancecovered>700)
-      {
-          if(counter==0)
-          {
-            //push notification here
-          
-          // console.log('Post process');
-         // console.log(location);
-         coveredDistance=distancecovered;
-          await  postLocation(location);
-            sleep(3000);
-            distance=200;
-           // console.log('post end');
-          }
-          else if(counter>0)
-          {
-            await  updateLocation(location);
-              sleep(3000);
-          }
-      }
-      else
-      {
-        if(counter!=0)
-        {
-         await deleteLocation();
-         
-          sleep(3000);
-          counter=0;
-          distance=500;
-        }
-        
-          
-      }
-      lastLocation.longitude=lon;
-      lastLocation.latitude=lat;
+      let accu=location.coords.accuracy;
+     
 
-      console.log(lastLocation);
+        
+     
+          let distancecovered=calculateDistance(lat,lon);
+          console.log(distancecovered);
+          if(distancecovered>700)
+          {
+              if(counter==0)
+              {
+                //push notification here
+              
+              // console.log('Post process');
+            // console.log(location);
+            coveredDistance=distancecovered;
+              await  postLocation(location);
+                sleep(3000);
+                distance=200;
+              // console.log('post end');
+              }
+              else if(counter>0)
+              {
+                await  updateLocation(location);
+                  sleep(3000);
+              }
+          }
+          else
+          {
+            if(counter!=0)
+            {
+            await deleteLocation();
+            
+              sleep(3000);
+              counter=0;
+              distance=500;
+            }
+            
+              
+          }
+
     }
-    else
-    {
-      console.log(fakecalculateDistance(lat,lon));
-    }
-  }
+  
+     // console.log(lastLocation);
   });
   const calculateDistance=(latitude,longitude)=>{
     let start={
@@ -346,7 +342,12 @@ const taskRandom = async taskData => {
         try {
         //  console.log('Trying to start background service');
         if(!BackgroundJob.isRunning())
+        {
+          counter=0;
           await BackgroundJob.start(taskRandom, options);
+         
+        }
+          
         //  console.log('Successful start!');
         } catch (e) {
           console.log('Error', e);

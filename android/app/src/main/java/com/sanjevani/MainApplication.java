@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -20,6 +22,7 @@ import java.util.Arrays;
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
 import org.unimodules.adapters.react.ReactModuleRegistryProvider;
 import org.unimodules.core.interfaces.SingletonModule;
+
 
 
 public class MainApplication extends Application implements ReactApplication {
@@ -51,6 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
           return "index";
         }
       };
+
 
   @Override
   public ReactNativeHost getReactNativeHost() {

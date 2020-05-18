@@ -174,36 +174,36 @@ class Dashboard extends Component{
     }
 
     //fetch news
-    fetchNews=async()=>{
-        try
-        {
-            let res=await fetch('http://newsapi.org/v2/top-headlines?country=in&q=corona',{
-                method:'GET',
-                headers:{
-                    Authorization:'Bearer 49e8c42e49a84330ba7a21b1c6e7c9eb'
-                }
-            });
+    // fetchNews=async()=>{
+    //     try
+    //     {
+    //         let res=await fetch('http://newsapi.org/v2/top-headlines?country=in&q=corona',{
+    //             method:'GET',
+    //             headers:{
+    //                 Authorization:'Bearer 49e8c42e49a84330ba7a21b1c6e7c9eb'
+    //             }
+    //         });
 
-            if(res.ok)
-            {
-                let data=await res.json();
-                this.setState({
-                    newsData:data.articles
-                });
+    //         if(res.ok)
+    //         {
+    //             let data=await res.json();
+    //             this.setState({
+    //                 newsData:data.articles
+    //             });
 
 
 
-            }
-        }
-        catch(error)
-        {
-            Toast.show({
-                text:'Network Error',
-                position:'top',
-                type:'danger'
-            });
-        }
-    }
+    //         }
+    //     }
+    //     catch(error)
+    //     {
+    //         Toast.show({
+    //             text:'Network Error',
+    //             position:'top',
+    //             type:'danger'
+    //         });
+    //     }
+    // }
 
     postOnFacebook=() => {
         let FacebookShareURL = this.state.FacebookShareURL;
@@ -286,7 +286,7 @@ class Dashboard extends Component{
 
        await this.fetchData();
 
-       await this.fetchNews();
+       //await this.fetchNews();
 
        if(this.state.userDistrict)
        await this.fetchDistrictData();
@@ -532,55 +532,55 @@ class Dashboard extends Component{
 
        }
 
-       _renderHeader=(item,expanded)=>
-       {
-            return(
-                <View style={{flex:1}}>
-                    <Button rounded disabled transparent style={{marginBottom:'3%',marginLeft:'2%',marginTop:'1%',borderColor:'#feb3ce',borderWidth:3,backgroundColor:'#71b2f2',width:'20%',justifyContent:'center'}}>
-                        <Text style={{fontFamily:'Right'}}> {new Date(item.publishedAt).toTimeString().toString().substring(0,5)} </Text>
-                    </Button>
-                    <View style={{
-              flexDirection: "row",
-              padding: 10,
-              justifyContent: "space-between",
-              alignItems: "center" ,
-              margin:5
-               }}>
-            <Text style={{ fontFamily:'Right',fontSize:16 ,color:'#4e4e4e',width:'90%'}}>
-                {" "}{item.title}
-              </Text>
-              {expanded
-                ? <Icon style={{ fontSize: 18 }} name="remove-circle"  />
-                : <Icon style={{ fontSize: 18 }} name="add-circle"/>}
-            </View>
-                </View>
-            )
-       }
-       _renderContent=(item)=>{
+    //    _renderHeader=(item,expanded)=>
+    //    {
+    //         return(
+    //             <View style={{flex:1}}>
+    //                 <Button rounded disabled transparent style={{marginBottom:'3%',marginLeft:'2%',marginTop:'1%',borderColor:'#feb3ce',borderWidth:3,backgroundColor:'#71b2f2',width:'20%',justifyContent:'center'}}>
+    //                     <Text style={{fontFamily:'Right'}}> {new Date(item.publishedAt).toTimeString().toString().substring(0,5)} </Text>
+    //                 </Button>
+    //                 <View style={{
+    //           flexDirection: "row",
+    //           padding: 10,
+    //           justifyContent: "space-between",
+    //           alignItems: "center" ,
+    //           margin:5
+    //            }}>
+    //         <Text style={{ fontFamily:'Right',fontSize:16 ,color:'#4e4e4e',width:'90%'}}>
+    //             {" "}{item.title}
+    //           </Text>
+    //           {expanded
+    //             ? <Icon style={{ fontSize: 18 }} name="remove-circle"  />
+    //             : <Icon style={{ fontSize: 18 }} name="add-circle"/>}
+    //         </View>
+    //             </View>
+    //         )
+    //    }
+    //    _renderContent=(item)=>{
 
-        return(
-            <View>
-            <View style={{flex:1 , flexDirection:'row',justifyContent:'space-around' }}>
-            <View style={{justifyContent:'center',alignItems:'center',width:150,height:150}}>
-            <Image source={{uri:item.urlToImage}} style={{width:'100%',height:'100%',borderRadius:15}} />
-            </View>
-            <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
-                <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}> {item.description} </Text>
+    //     return(
+    //         <View>
+    //         <View style={{flex:1 , flexDirection:'row',justifyContent:'space-around' }}>
+    //         <View style={{justifyContent:'center',alignItems:'center',width:150,height:150}}>
+    //         <Image source={{uri:item.urlToImage}} style={{width:'100%',height:'100%',borderRadius:15}} />
+    //         </View>
+    //         <View style={{width:width-200,justifyContent:'center',alignItems:'center'}}>
+    //             <Text style={{fontFamily:'MSRegular',color:'#4E4E4E'}}> {item.description} </Text>
                
-            </View>
+    //         </View>
           
-        </View>
-        <View style={{flex:1 , justifyContent:'center',alignItems:'flex-end',marginTop:'1%'}}>
-                    <Button transparent style={{padding:10,backgroundColor:'#528EA0',borderTopLeftRadius:20,borderBottomLeftRadius:20}} onPress={()=> Linking.openURL(item.url) }>
-                        <Text style={{fontFamily:'MSRegular',color:'#FFFFFF'}}> Read More... </Text>
-                    </Button>
-         </View>
+    //     </View>
+    //     <View style={{flex:1 , justifyContent:'center',alignItems:'flex-end',marginTop:'1%'}}>
+    //                 <Button transparent style={{padding:10,backgroundColor:'#528EA0',borderTopLeftRadius:20,borderBottomLeftRadius:20}} onPress={()=> Linking.openURL(item.url) }>
+    //                     <Text style={{fontFamily:'MSRegular',color:'#FFFFFF'}}> Read More... </Text>
+    //                 </Button>
+    //      </View>
         
        
-        </View>
-        )
+    //     </View>
+    //     )
 
-       }
+    //    }
     render()
     {
 
@@ -639,7 +639,7 @@ else
                 
                 <View style={styles.container}>
                     <View style={styles.titleImage}>
-                        <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
+                        <Button transparent style={{position:'absolute',top:4,left:12}} onPress={()=>this.props.navigation.toggleDrawer()}>
                            <Ionicons color='#ef8354' name="md-menu" size={32}/>
                         </Button>
                         <Image style={{width:250,height:45}} source={require('../assests/images/title.png')}/>
@@ -691,34 +691,38 @@ else
                         <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> THINGS TO DO</Text>
 
                     </View>
-                    <ScrollView showsHorizontalScrollIndicator={false} onScroll={this.handleScroll} horizontal={true} contentContainerStyle={{justifyContent:'center',alignItems:'center',paddingBottom:'4%',paddingRight:'2%',paddingLeft:'2%',elevation:20}} >
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
-                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
-
+                    <ScrollView showsHorizontalScrollIndicator={false} onScroll={this.handleScroll} horizontal={true} contentContainerStyle={{justifyContent:'space-between',alignItems:'stretch',paddingBottom:'4%',paddingRight:'2%',paddingLeft:'2%',elevation:20}} >
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',shadowColor:'#f9f5d9',shadowOpacity:0.5,shadowRadius:16,elevation:5,borderRadius:20,width:'100%'}}>
+                        <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
+                        <Text style={{color:'#9e9e9e', fontSize:18,fontFamily:'MSRegular'}}>Maintain Social Distance</Text>
+                        </View>
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
                         <LottieView  style={styles.lottie} source={require('../assests/images/data 6feet.json')}  autoPlay loop /> 
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:width*3/4}}>
-                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
-
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:5,borderRadius:20,width:width*3/4}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
+                        <Text style={{color:'#9e9e9e' , fontSize:18,fontFamily:'MSRegular'}}>Regular Hand-Wash</Text>
+                    </View>
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
                         <LottieView  style={styles.lottie} source={require('../assests/images/data final handwash.json')}  progress={this.state.speed2}/> 
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
-                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
-
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:5,borderRadius:20,width:'100%'}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
+                        <Text style={{color:'#9e9e9e' , fontSize:18,fontFamily:'MSRegular'}}>Avoid Crowd</Text>
+                    </View>
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
-                        <LottieView  style={styles.lottie} source={require('../assests/images/data comunity transfer.json')}  progress={this.state.speed3}/> 
+                        <LottieView  style={{width:200,height:200}} source={require('../assests/images/data comunity transfer.json')}  progress={this.state.speed3}/> 
                         </View>
                         
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',padding:15,shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:10,borderRadius:20,width:'100%'}}>
-                        <Text style={{color:'#9e9e9e',marginLeft:'2%' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
-
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',shadowColor:'#000',shadowOpacity:0.5,shadowRadius:16,elevation:5,borderRadius:20,width:'100%'}}>
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingTop:'5%'}}>
+                        <Text style={{color:'#9e9e9e' , fontSize:18,fontFamily:'MSRegular'}}>Cover Nose</Text>
+                    </View>
                         <View style={{flex:1,width:'90%',height:250,justifyContent:'center',alignItems:'center'}}>
                         <LottieView  style={styles.lottie} source={require('../assests/images/data Coughing.json')}  progress={this.state.speed4}/> 
                         </View>
@@ -761,7 +765,7 @@ else
 
                     </View>
 
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
+                    {/* <View style={{flex:1,justifyContent:'center',alignItems:'center',borderRadius:20,padding:10,margin:10}}>
                         <Text style={{fontSize:25,color:'#B8876B',fontFamily:'Right'}}> Latest News </Text>
                     </View>
                    
@@ -771,7 +775,7 @@ else
                     dataArray={this.state.newsData}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
-                     />
+                     /> */}
                   
               </ScrollView>
 
