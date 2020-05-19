@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  StyleSheet, Text, View,Image} from 'react-native';
+import {  StyleSheet, Text, View,Image, StatusBar} from 'react-native';
 import {Button } from 'native-base';
 
 
@@ -65,7 +65,10 @@ const styles = StyleSheet.create({
 export default class SwipeImage extends Component {
   render() {
     return (
+      <>
+       <StatusBar hidden/>
       <Swiper style={styles.wrapper} loop={false} showsButtons={false}>
+       
         <View style={styles.slide1}>
           
           <View style={{flex:2 , justifyContent:'center',alignItems:'center'}}>
@@ -127,6 +130,7 @@ export default class SwipeImage extends Component {
           </View>
         </View>
       </Swiper>
+      </>
     )
   }
 }

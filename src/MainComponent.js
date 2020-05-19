@@ -18,6 +18,7 @@ import Overall from './components/post-signup/OverallDataScreen';
 import District from './components/post-signup/DistrictDataScreen';
 import GovtNotify from './components/post-signup/GovtNotification';
 import Hospital from './components/post-signup/hospital';
+import { Root } from 'native-base';
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 const {height,width}=Dimensions.get('window');
@@ -58,10 +59,10 @@ class Main extends Component{
 
     render(){
         return(
-            <>
+            <Root>
         
            <AppContainer/>
-           </>
+           </Root>
         )
     }
 }
@@ -103,7 +104,7 @@ const CustomDrawer=(props)=>(
               
   <SafeAreaProvider>
   <SafeAreaView style={{flex:1}} forceInset={{top:'always',horizontal:'never'}}>
-    <View style={{alignItems:'center',flexDirection:'row',padding:10,borderBottomColor:'black',borderBottomWidth:1}}>
+    <View style={{alignItems:'center',flexDirection:'row',padding:10,paddingBottom:0}}>
       <View style={{height:105,width:105,justifyContent:'center',alignItems:'center',borderRadius:50,elevation:10}}>
 
       
@@ -111,10 +112,13 @@ const CustomDrawer=(props)=>(
       </View>
       <View style={{flexDirection:'column',alignItems:'flex-start',justifyContent:'center'}}>
       <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E',marginLeft:2}}>Hi , {name} </Text>
-      <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
       <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {mobile} </Text>
 
       </View>
+    </View>
+    <View style={{marginVertical:'2%' ,justifyContent:'center',paddingBottom:5,alignItems:'center',borderBottomColor:'black',borderBottomWidth:1}}>
+    <Text style={{fontFamily:'Right',fontSize:14,marginVertical:'1%',color:'#4E4E4E'}}> {email} </Text>
+      
     </View>
     <ScrollView >
     <DrawerItems inactiveTintColor="#F3F3F3"  labelStyle={{fontFamily:'Right',fontSize:16,justifyContent:'center',alignSelf:'center',width:width*7/10,textAlign:'center',elevation:5}}  {...props}/>
@@ -141,7 +145,7 @@ const DrawerNavigator=createDrawerNavigator({
   'Learn COVID 19':{
     screen:LearnCOVID
   },
-  'Hospital':{
+  'Help Centers':{
     screen:Hospital
   }
 },{

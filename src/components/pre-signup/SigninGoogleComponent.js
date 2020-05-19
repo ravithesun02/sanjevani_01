@@ -34,7 +34,11 @@ class GoogleSign extends Component{
   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
   accountName: '', // [Android] specifies an account name on the device that should be used
   //iosClientId: '<FROM DEVELOPER CONSOLE>',
-  androidClientId:'30917214910-0h41jb5s11tm1oadn00v214cqi567t4c.apps.googleusercontent.com'
+  //debug
+  androidClientId:'30917214910-qo3lo8ionoh641ihk6f21j40mrnfrs2t.apps.googleusercontent.com'
+  //relese
+
+ // androidClientId:'30917214910-qo3lo8ionoh641ihk6f21j40mrnfrs2t.apps.googleusercontent.com'
     });
   }
 onSignIn=(userInfo)=>{

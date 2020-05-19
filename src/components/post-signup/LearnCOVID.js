@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text,View, StyleSheet,Animated,ImageBackground} from 'react-native';
+import { Text,View, StyleSheet,Animated,ImageBackground, StatusBar} from 'react-native';
 import {FAQ,Sawal}from '../assests/COVID';
 import { Button, Accordion ,Content,Icon, Fab} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -55,7 +55,7 @@ class LearnCOVID extends React.Component{
     render(){
         return(
             <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%'}}>
-               
+               <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
             <Button transparent style={{position:'absolute',top:4,left:10}} onPress={()=>this.props.navigation.toggleDrawer()}>
                        <Ionicons color='#ef8354' name="md-menu" size={32}/>
                     </Button>

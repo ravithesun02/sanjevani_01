@@ -11,15 +11,18 @@ import PushNotification from 'react-native-push-notification';
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 
 var jwt_token=null;
-var counter=0;
+var counter;
 var distance=500;
 var home_lat=0;
 var home_lon=0;
 var optionsLoc={
-  "accuracy":Location.Accuracy.Balanced,
-  "timeInterval":10000,
-  "distanceInterval":distance
+  "accuracy":Location.Accuracy.High,
+  "timeInterval":10000
 };
+var lastLocation={
+  latitude:0,
+  longitude:0
+}
 var coveredDistance=0;
 
 const taskRandom = async taskData => {
@@ -93,11 +96,19 @@ const taskRandom = async taskData => {
       {
         counter++;
         console.log('Posted location');
-        firstLocalNotification(`You have crossed ${Math.floor(coveredDistance/1000)} m from your home`);
+        firstLocalNotification(`You have crossed ${coveredDistance/1000} Km from your home`);
            
       }
     })
-    .catch((err)=>console.log(err.message));
+    .catch(async(err)=>{
+      console.log(err);
+      console.log(err.message);
+      if(err.message==='Error503:undefined')
+      {
+        console.log('updating');
+        await updateLocation(locations);
+      }
+    });
 
   }
 
@@ -174,6 +185,7 @@ const taskRandom = async taskData => {
       if(data.code == 2)
       {
         console.log('Deleted successfully');
+        firstLocalNotification('You are SAFE now ! Stay at Home');
       }
     })
     .catch((err)=>console.log(err.message));
@@ -220,45 +232,53 @@ const taskRandom = async taskData => {
       var { locations } = data;
      // console.log(locations);
       var location=locations[0];
-     // console.log(location);
+     console.log(location);
       let lat=location.coords.latitude;
       let lon=location.coords.longitude;
-      let distancecovered=calculateDistance(lat,lon);
-     // console.log(distancecovered);
-      if(distancecovered>1000)
-      {
-          if(counter==0)
-          {
-            //push notification here
-          
-          // console.log('Post process');
-         // console.log(location);
-         coveredDistance=distancecovered;
-          await  postLocation(location);
-            sleep(3000);
-            distance=200;
-           // console.log('post end');
-          }
-          else if(counter>0)
-          {
-            await  updateLocation(location);
-              sleep(3000);
-          }
-      }
-      else
-      {
-        if(counter!=0)
-        {
-         await deleteLocation();
-         firstLocalNotification('You are SAFE now ! Stay at Home');
-          sleep(3000);
-          counter=0;
-          distance=500;
-        }
+      let accu=location.coords.accuracy;
+     
+
         
-          
-      }
+     
+          let distancecovered=calculateDistance(lat,lon);
+          console.log(distancecovered);
+          if(distancecovered>700)
+          {
+              if(counter==0)
+              {
+                //push notification here
+              
+              // console.log('Post process');
+            // console.log(location);
+            coveredDistance=distancecovered;
+              await  postLocation(location);
+                sleep(3000);
+                distance=200;
+              // console.log('post end');
+              }
+              else if(counter>0)
+              {
+                await  updateLocation(location);
+                  sleep(3000);
+              }
+          }
+          else
+          {
+            if(counter!=0)
+            {
+            await deleteLocation();
+            
+              sleep(3000);
+              counter=0;
+              distance=500;
+            }
+            
+              
+          }
+
     }
+  
+     // console.log(lastLocation);
   });
   const calculateDistance=(latitude,longitude)=>{
     let start={
@@ -273,6 +293,21 @@ const taskRandom = async taskData => {
     return haversine(start,end,{unit:'meter'});
 
   }
+
+  const fakecalculateDistance=(latitude,longitude)=>{
+    let start={
+      latitude:lastLocation.latitude,
+      longitude:lastLocation.longitude
+    };
+    let end={
+      latitude:latitude,
+      longitude:longitude
+    };
+
+    return haversine(start,end,{unit:'meter'});
+
+  }
+
   const options = {
     taskName: 'sanjevani_always',
     taskTitle: 'SANJEVANI',
@@ -307,7 +342,12 @@ const taskRandom = async taskData => {
         try {
         //  console.log('Trying to start background service');
         if(!BackgroundJob.isRunning())
+        {
+          counter=0;
           await BackgroundJob.start(taskRandom, options);
+         
+        }
+          
         //  console.log('Successful start!');
         } catch (e) {
           console.log('Error', e);
@@ -369,6 +409,8 @@ const taskRandom = async taskData => {
          // console.log(result);
           home_lat=result.home_location.latitude;
           home_lon=result.home_location.longitude;
+          lastLocation.latitude=home_lat;
+          lastLocation.longitude=home_lon;
           this.locationStatus();
         }
       })

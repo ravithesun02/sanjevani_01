@@ -85,6 +85,10 @@ target 'sanjevani' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   target 'sanjevaniTests' do
     inherit! :complete
     # Pods for testing

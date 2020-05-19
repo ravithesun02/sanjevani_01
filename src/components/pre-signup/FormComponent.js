@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ScrollView,Modal,} from 'react-native'
+import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ScrollView,Modal,StatusBar} from 'react-native'
 import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
@@ -14,8 +14,6 @@ import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 import PDF from '../pre-signup/T&C'
-import {getPhoneNumber, getDeviceId, getPhoneNumberSync } from 'react-native-device-info';
-import { Value, color } from 'react-native-reanimated';
 
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
@@ -306,6 +304,7 @@ error=>{
 else
     return (
       <ImageBackground source={require('../assests/images/back.png')} style={{width:'100%',height:'100%',flex:1}} >
+         <StatusBar barStyle='dark-content' backgroundColor='#f9f5d9' />
          <Modal 
             onDismiss={()=>{this.state.openSetting?this.opensettings():undefined}}
             visible={this.state.isModal}
