@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ListView, ScrollView,Modal,} from 'react-native'
+import {View, TextInput,StyleSheet, Text, ImageBackground,Image,ActivityIndicator,Dimensions, ScrollView,Modal,} from 'react-native'
 import {Formik} from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import camimg from '../assests/images/title.png';
 import * as Yup from 'yup';
-import { Card, ListItem, List,Button ,Toast,CheckBox} from 'native-base';
+import { Card, ListItem, List,Button ,Toast,CheckBox, Picker} from 'native-base';
 import FontAwesome5  from 'react-native-vector-icons/FontAwesome5';
 import  Entypo from 'react-native-vector-icons/Entypo';
 import * as Location from 'expo-location';
@@ -14,6 +14,8 @@ import {baseURL} from '../assests/reuse/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import Loader from '../assests/reuse/loadingScreen';
 import PDF from '../pre-signup/T&C'
+import {getPhoneNumber, getDeviceId, getPhoneNumberSync } from 'react-native-device-info';
+import { Value, color } from 'react-native-reanimated';
 
 
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
@@ -29,6 +31,10 @@ const SignupSchema = Yup.object().shape({
   email: Yup.string()
     .email('*Invalid email')
     .required('*Email Required'),
+  mobile: Yup.string()
+    .min(10, '*INVALID NUMBER!')
+    .required('*phone no. required'),
+  occupation: Yup.string().required('*Sprcify your Occupation')
 });
 class SignUp extends React.Component {
   constructor(props){
@@ -385,13 +391,12 @@ else
                       validationSchema={SignupSchema}
                       >
                         { ({values,handleSubmit,handleChange,handleBlur,errors,touched})=> (
-                        
+                      
                         <React.Fragment>
                             <TextInput
                             style={styles.input}
                             placeholder='First Name'
                             placeholderTextColor='black'
-                            validate
                             onChangeText={handleChange('first_name')}
                             onBlur={handleBlur('first_name')}
                             value={values.first_name}
@@ -405,15 +410,19 @@ else
                             placeholderTextColor='black'
                             onChangeText={handleChange('last_name')}
                             />
-                
-                            <TextInput
-                            style={styles.input}
+
+                            <Picker 
+                            style={ styles.input }
                             placeholder='Occupation'
-                            placeholderTextColor='black'
-                            onChangeText={handleChange('occupation')}
-                            onBlur={handleBlur('occupation')}
-                            value={values.occupation}
-                            />
+                            onValueChange={handleChange('occupation')}
+                            selectedValue={values.occupation}
+                            >
+                              <Picker.Item label="occupation" />
+                              <Picker.Item label="DOCTOR" value="doctor" />
+                              <Picker.Item label="POLICE" value="police" />
+                              <Picker.Item label="other" value="other" />
+                            </Picker>
+                            {errors.occupation && touched.occupation ? <Text style={{fontSize:10, color:'red'}}>{errors.occupation}</Text> : null}
                             <TextInput
                             style={styles.input}
                             placeholder='Email'
@@ -432,8 +441,11 @@ else
                             keyboardType='numeric'
                             onChangeText={handleChange('mobile')}
                             onBlur={handleBlur('mobile')}
-                            value={values.mobile}
+                            value={values.mobile}                          
                             />
+                            {errors.mobile && touched.mobile ? (
+                                <Text style={{fontSize:10, color:'red'}}>{errors.mobile}</Text>
+                              ) : null}
                             <List>
                               <ListItem noBorder>
                                 <CheckBox style={{borderRadius:10,height:20,width:20}} checked={this.state.isChecked} onPress={()=> this.togglecheck()} />
@@ -448,7 +460,7 @@ else
                             <Text style={{fontWeight:'bold'}}>PROCEED</Text>
                           </Button> :
                          
-                            <Button style={{backgroundColor:"#FF8A65",justifyContent:'center',alignItems:'center',width:'50%',borderRadius:20}} onPress={()=>{this.postData()}}>
+                            <Button style={{backgroundColor:"#FF8A65",justifyContent:'center',alignItems:'center',width:'50%',borderRadius:20}} disabled={!this.state.isChecked} onPress={()=>{this.postData()}}>
                               <Text style={{fontWeight:'bold'}}>SUBMIT</Text>
                             </Button>
                            }
