@@ -15,6 +15,8 @@ var counter;
 var distance=500;
 var home_lat=0;
 var home_lon=0;
+var State = null;
+var District = null;
 var optionsLoc={
   "accuracy":Location.Accuracy.High,
   "timeInterval":10000
@@ -62,7 +64,9 @@ const taskRandom = async taskData => {
       'latitude':locations.coords.latitude,
       'longitude':locations.coords.longitude,
       'accuracy':locations.coords.accuracy,
-      'current_timestamp':locations.timestamp
+      'current_timestamp':locations.timestamp,
+      'state':State,
+      'district':District
     }
 
   //  console.log(postdata);
@@ -118,7 +122,9 @@ const taskRandom = async taskData => {
       'latitude':locations.coords.latitude,
       'longitude':locations.coords.longitude,
       'accuracy':locations.coords.accuracy,
-      'current_timestamp':locations.timestamp
+      'current_timestamp':locations.timestamp,
+      'state':State,
+      'district':District
     }
 
     fetch(baseURL+'/locupdate/foreign',{
@@ -411,6 +417,8 @@ const taskRandom = async taskData => {
           home_lon=result.home_location.longitude;
           lastLocation.latitude=home_lat;
           lastLocation.longitude=home_lon;
+          State=result.state;
+          District=result.district;
           this.locationStatus();
         }
       })
