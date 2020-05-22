@@ -32,7 +32,7 @@ const SignupSchema = Yup.object().shape({
   mobile: Yup.string()
     .min(10, '*INVALID NUMBER!')
     .required('*phone no. required'),
-  occupation: Yup.string().required('*Sprcify your Occupation')
+  occupation: Yup.string().required('*Specify your Occupation')
 });
 class SignUp extends React.Component {
   constructor(props){
@@ -77,9 +77,14 @@ class SignUp extends React.Component {
        googleData.first_name=result.first_name;
        googleData.last_name=result.last_name;
        googleData.email=result.email;
-     //  console.log(googleData);
+     console.log(googleData);
       
 
+     }
+
+     else
+     {
+       console.log(response);
      }
 
     }
@@ -364,7 +369,7 @@ else
         </View>
 
         <View style={styles.innerContainer}>
-          <ScrollView style={{opacity:10,width:'100%'}}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{opacity:10,width:'100%'}}>
             <View style={{justifyContent:'center',alignItems:'center'}}>
             {this.state.profile_image ? 
               <View>
@@ -416,7 +421,7 @@ else
                             onValueChange={handleChange('occupation')}
                             selectedValue={values.occupation}
                             >
-                              <Picker.Item label="occupation" />
+                              <Picker.Item disabled value="null" label="occupation" />
                               <Picker.Item label="DOCTOR" value="doctor" />
                               <Picker.Item label="POLICE" value="police" />
                               <Picker.Item label="other" value="other" />
